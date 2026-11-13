@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Asesmen & Materi POLRI — Persona Research & Consulting</title>
+    <style>
+        :root {
+            --primary: #0f1c3f;
+            --primary-light: #1a2d63;
+            --accent: #b85d79;
+            --accent-hover: #9e4863;
+            --cream: #faf7f2;
+            --bg: #f3f4f6;
+            --white: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+            --border: #e5e7eb;
+            --success: #1e8449;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        header {
+            background: var(--primary);
+            color: var(--cream);
+            padding: 1.8rem 1.25rem;
+            text-align: center;
+            border-bottom: 5px solid var(--accent);
+            box-shadow: 0 4px 14px rgba(15, 28, 63, 0.14);
+        }
+        header .brand-title {
+            font-weight: 800;
+            font-size: 1.55rem;
+            letter-spacing: 0.8px;
+            margin: 0;
+        }
+        header .brand-sub {
+            color: #e2b8c6;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            display: block;
+            margin-top: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .hero-banner {
+            background: var(--cream);
+            border-bottom: 1px solid #e6dce0;
+            padding: 1.5rem 1.25rem;
+            text-align: center;
+        }
+        .hero-banner h1 {
+            color: var(--primary);
+            font-size: 1.35rem;
+            margin: 0 0 8px 0;
+        }
+        .hero-banner p {
+            color: var(--text-muted);
+            max-width: 760px;
+            margin: 0 auto;
+            font-size: 0.94rem;
+        }
+        .container {
+            max-width: 1120px;
+            margin: 28px auto;
+            padding: 0 18px;
+            width: 100%;
+            flex: 1;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-left: 5px solid var(--accent);
+            padding-left: 14px;
+            margin: 32px 0 18px 0;
+        }
+        .section-header:first-child {
+            margin-top: 0;
+        }
+        .section-header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: 800;
+            letter-spacing: 0.3px;
+        }
+        .section-header .badge-count {
+            background: var(--primary);
+            color: var(--cream);
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            letter-spacing: 0.4px;
+        }
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 24px;
+            box-shadow: 0 2px 12px rgba(15, 28, 63, 0.07);
+            border-top: 4px solid var(--primary);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(15, 28, 63, 0.12);
+            border-top-color: var(--accent);
+        }
+        .card.card-accent {
+            border-top-color: var(--accent);
+        }
+        .card.card-pdf {
+            border-top-color: var(--success);
+            background: linear-gradient(180deg, #ffffff 0%, #fcfbf8 100%);
+        }
+        .card-tag {
+            display: inline-block;
+            background: var(--cream);
+            color: var(--accent);
+            border: 1px solid #ead8de;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            width: fit-content;
+        }
+        .card.card-pdf .card-tag {
+            background: #eafaf1;
+            color: var(--success);
+            border-color: #cdebd9;
+        }
+        .card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.12rem;
+            color: var(--primary);
+            line-height: 1.4;
+        }
+        .card p {
+            margin: 0 0 18px 0;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+            flex: 1;
+        }
+        .card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 18px;
+            padding-top: 12px;
+            border-top: 1px dashed var(--border);
+            font-size: 0.82rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        .card-meta span {
+            background: #f3f4f6;
+            padding: 4px 10px;
+            border-radius: 5px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 12px 18px;
+            border-radius: 7px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.2s ease, opacity 0.2s ease;
+            border: none;
+            text-align: center;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: var(--cream);
+        }
+        .btn-primary:hover {
+            background: var(--primary-light);
+        }
+        .btn-accent {
+            background: var(--accent);
+            color: var(--white);
+        }
+        .btn-accent:hover {
+            background: var(--accent-hover);
+        }
+        .btn-pdf {
+            background: var(--success);
+            color: var(--white);
+        }
+        .btn-pdf:hover {
+            background: #176b3a;
+        }
+        .pdf-note {
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: var(--cream);
+            padding: 10px 12px;
+            border-radius: 6px;
+            border: 1px solid #ece3e6;
+        }
+        .pdf-note code {
+            background: #ffffff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #d1d5db;
+            color: var(--primary);
+            font-family: Consolas, Monaco, monospace;
+            font-size: 0.78rem;
+        }
+        .disclaimer-box {
+            margin-top: 34px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-left: 5px solid var(--primary);
+            border-radius: 8px;
+            padding: 18px 22px;
+            font-size: 0.86rem;
+            color: var(--text-muted);
+        }
+        .disclaimer-box strong {
+            color: var(--primary);
+        }
+        footer {
+            background: var(--primary);
+            color: var(--cream);
+            text-align: center;
+            padding: 1.4rem 1rem;
+            margin-top: 40px;
+            border-top: 4px solid var(--accent);
+            font-size: 0.86rem;
+        }
+        footer a {
+            color: #e2b8c6;
+            text-decoration: none;
+            font-weight: 700;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 640px) {
+            header .brand-title { font-size: 1.3rem; }
+            .section-header { flex-direction: column; align-items: flex-start; gap: 6px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="brand-title">PERSONA RESEARCH &amp; CONSULTING</div>
+    <span class="brand-sub">Portal Asesmen &amp; Pembinaan Tes Kepribadian — Persiapan Seleksi POLRI</span>
+</header>
+
+<div class="hero-banner">
+    <h1>Pusat Latihan &amp; Modul Materi Tes Kepribadian (TKP)</h1>
+    <p>Silakan pilih modul bahan bacaan atau instrumen ujian simulasi di bawah ini. Seluruh hasil pengerjaan ujian akan tercatat secara otomatis pada sistem evaluasi <strong>MASTER PRC</strong> dan dapat diunduh sebagai arsip pembahasan pribadi.</p>
+</div>
+
+<main class="container">
+
+    <!-- BAGIAN 1: MODUL MATERI PDF -->
+    <div class="section-header">
+        <h2>1. Modul Materi &amp; Bahan Bacaan (PDF)</h2>
+        <span class="badge-count">Folder: /materi/</span>
+    </div>
+
+    <div class="grid-cards">
+        <div class="card card-pdf">
+            <div>
+                <span class="card-tag">Modul Utama • Format PDF</span>
+                <h3>Materi Penguasaan Tes Kepribadian &amp; TKP POLRI</h3>
+                <p>Panduan konseptual mengenai tujuan tes kepribadian, tujuh kriteria karakter abdi negara, empat dimensi pengukuran psikologi, sistem skor 1–5, skala persetujuan, serta strategi pengerjaan soal.</p>
+                <div class="card-meta">
+                    <span>📄 Dokumen PDF</span>
+                    <span>📁 Folder: materi/</span>
+                </div>
+            </div>
+            <div>
+                <a href="materi/materi_tes_kepribadian.pdf" target="_blank" rel="noopener" class="btn btn-pdf">
+                    Buka / Unduh Materi PDF
+                </a>
+                <div class="pdf-note">
+                    <strong>Catatan GitHub:</strong> Buat folder bernama <code>materi</code> di repositori Anda, lalu unggah file PDF dengan nama <code>materi_tes_kepribadian.pdf</code> (atau sesuaikan nama file pada tautan ini).
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BAGIAN 2: TES PENGUASAAN MATERI (TEORI & KONSEP) -->
+    <div class="section-header">
+        <h2>2. Tes Penguasaan Materi &amp; Konsep (Teori)</h2>
+        <span class="badge-count">2 Paket Ujian</span>
+    </div>
+
+    <div class="grid-cards">
+        <!-- Menu 1: tes_materi_kepribadian_1.html -->
+        <div class="card card-accent">
+            <div>
+                <span class="card-tag">Teori TKP • Seri 1</span>
+                <h3>Tes Penguasaan Materi Tes Kepribadian (TKP) — Seri 1</h3>
+                <p>Evaluasi pemahaman konsep dasar TKP, tujuh pilar karakter abdi negara, empat dimensi pengukuran (Prososial, Kepercayaan Diri, Pengendalian Diri, Penyesuaian Diri), serta sistem gradasi skor.</p>
+                <div class="card-meta">
+                    <span>📝 50 Butir Soal</span>
+                    <span>🎯 Skala Nilai 100</span>
+                    <span>📥 Pembahasan HTML</span>
+                </div>
+            </div>
+            <a href="tes_materi_kepribadian_1.html" class="btn btn-accent">Mulai Tes Materi Seri 1 →</a>
+        </div>
+
+        <!-- Menu 2: tes_materi_kepribadian_2.html -->
+        <div class="card card-accent">
+            <div>
+                <span class="card-tag">Teori Kepribadian • Seri 2 (Revisi)</span>
+                <h3>Tes Penguasaan Materi Tes Kepribadian — Seri 2</h3>
+                <p>Paket pendalaman teori kepribadian tingkat lanjut dengan opsi pengecoh ketat, analisis arah pernyataan skala persetujuan (reverse-scored items), dan strategi pencegahan kelelahan kognitif.</p>
+                <div class="card-meta">
+                    <span>📝 50 Butir Soal</span>
+                    <span>🎯 Skala Nilai 100</span>
+                    <span>📥 Pembahasan HTML</span>
+                </div>
+            </div>
+            <a href="tes_materi_kepribadian_2.html" class="btn btn-accent">Mulai Tes Materi Seri 2 →</a>
+        </div>
+    </div>
+
+    <!-- BAGIAN 3: SIMULASI ASESMEN KEPRIBADIAN SITUASIONAL (TKP) -->
+    <div class="section-header">
+        <h2>3. Simulasi Asesmen Kepribadian Situasional (TKP)</h2>
+        <span class="badge-count">3 Paket Simulasi</span>
+    </div>
+
+    <div class="grid-cards">
+        <!-- Menu 3: tkp_seri_2.html -->
+        <div class="card">
+            <div>
+                <span class="card-tag">Simulasi Situasional • Seri 2</span>
+                <h3>Asesmen Kepribadian TKP — Seri 2</h3>
+                <p>Latihan studi kasus situasional pelayanan publik, empati kelompok rentan, solidaritas rekan kerja, pengendalian emosi di lapangan, dan penyesuaian diri terhadap aturan baru.</p>
+                <div class="card-meta">
+                    <span>📋 30 Butir Kasus</span>
+                    <span>⭐ Skor 1–5 (Maks. 150)</span>
+                    <span>📊 Profil 4 Dimensi</span>
+                </div>
+            </div>
+            <a href="tkp_seri_2.html" class="btn btn-primary">Mulai Simulasi TKP Seri 2 →</a>
+        </div>
+
+        <!-- Menu 4: tkp_seri_3.html -->
+        <div class="card">
+            <div>
+                <span class="card-tag">Simulasi Situasional • Seri 3</span>
+                <h3>Asesmen Kepribadian TKP — Seri 3</h3>
+                <p>Latihan studi kasus penegakan disiplin, penanganan konflik sosial horizontal, integritas anti-gratifikasi, ketegasan protokol penjagaan, dan adaptasi tugas lintas bidang.</p>
+                <div class="card-meta">
+                    <span>📋 30 Butir Kasus</span>
+                    <span>⭐ Skor 1–5 (Maks. 150)</span>
+                    <span>📊 Profil 4 Dimensi</span>
+                </div>
+            </div>
+            <a href="tkp_seri_3.html" class="btn btn-primary">Mulai Simulasi TKP Seri 3 →</a>
+        </div>
+
+        <!-- Menu 5: tkp_seri_4.html -->
+        <div class="card">
+            <div>
+                <span class="card-tag">Simulasi Situasional • Seri 4</span>
+                <h3>Asesmen Kepribadian TKP — Seri 4</h3>
+                <p>Latihan studi kasus tanggap darurat bencana, kepemimpinan pemulihan krisis layanan, ketahanan provokasi massa, akuntabilitas keuangan, serta inovasi pelayanan masyarakat.</p>
+                <div class="card-meta">
+                    <span>📋 30 Butir Kasus</span>
+                    <span>⭐ Skor 1–5 (Maks. 150)</span>
+                    <span>📊 Profil 4 Dimensi</span>
+                </div>
+            </div>
+            <a href="tkp_seri_4.html" class="btn btn-primary">Mulai Simulasi TKP Seri 4 →</a>
+        </div>
+    </div>
+
+    <div class="disclaimer-box">
+        <strong>Catatan Akademik &amp; Ketentuan Penggunaan:</strong> Seluruh modul materi dan instrumen simulasi pada portal ini disusun secara internal oleh <strong>Persona Research &amp; Consulting (PRC)</strong> sebagai sarana edukasi dan pembinaan karakter calon peserta seleksi, bukan merupakan instrumen maupun standar norma resmi institusi POLRI.
+    </div>
+
+</main>
+
+<footer>
+    <div>&copy; 2026 <strong>Persona Research &amp; Consulting (PRC)</strong> — Layanan Bimbingan &amp; Asesmen Psikologi</div>
+    <div style="margin-top: 4px;">Informasi &amp; Konsultasi Peserta: <a href="https://wa.me/628774255786" target="_blank" rel="noopener">WhatsApp 0877 425 5786</a></div>
+</footer>
+
+</body>
+</html>

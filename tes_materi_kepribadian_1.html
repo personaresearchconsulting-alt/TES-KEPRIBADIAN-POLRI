@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tes Penguasaan Materi TKP — Persiapan Seleksi POLRI</title>
+    <style>
+        :root { --primary: #0f1c3f; --accent: #b85d79; --cream: #faf7f2; --bg: #f3f4f6; --white: #ffffff; --success: #1e8449; --danger: #c0392b; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; color: #1f2937; }
+        header { background: var(--primary); color: var(--cream); padding: 1.1rem; text-align: center; border-bottom: 4px solid var(--accent); font-weight: 800; font-size: 1.35rem; letter-spacing: 0.5px; }
+        header small { color: #e2b8c6; font-size: 0.8rem; letter-spacing: 2px; display: block; margin-top: 4px; }
+        .main-container { display: none; flex: 1; max-width: 1200px; margin: 20px auto; gap: 20px; padding: 0 15px; width: 100%; }
+        .content-area { flex: 1; background: var(--white); padding: 30px; border-radius: 10px; box-shadow: 0 2px 12px rgba(15,28,63,0.08); }
+        .sidebar { width: 310px; background: var(--white); padding: 20px; border-radius: 10px; height: fit-content; position: sticky; top: 20px; box-shadow: 0 2px 12px rgba(15,28,63,0.08); }
+        .q-text { font-size: 1.08rem; font-weight: 600; color: var(--primary); margin-bottom: 20px; line-height: 1.65; text-align: justify; }
+        .option { display: flex; align-items: flex-start; padding: 14px 16px; border: 1.5px solid #d1d5db; border-radius: 8px; margin-bottom: 12px; cursor: pointer; transition: 0.2s; line-height: 1.55; background: #fff; }
+        .option:hover { border-color: var(--accent); background: var(--cream); }
+        .option.selected { border-color: var(--primary); background: #eef2ff; border-width: 2px; }
+        .nav-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 15px; max-height: 280px; overflow-y: auto; padding-right: 4px; }
+        .nav-dot { padding: 8px 0; text-align: center; background: #f3f4f6; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; color: #374151; }
+        .nav-dot.current { border: 2px solid var(--accent); color: var(--accent); background: #fff; }
+        .nav-dot.filled { background: var(--primary); color: var(--cream); }
+        .btn { padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; width: 100%; margin-top: 10px; font-size: 0.95rem; transition: 0.2s; }
+        .btn-primary { background: var(--primary); color: var(--cream); }
+        .btn-primary:hover { opacity: 0.92; }
+        .btn-download { background: var(--accent); color: #ffffff; width: auto; display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; margin: 6px; font-size: 0.92rem; border-radius: 6px; box-shadow: 0 2px 8px rgba(184,93,121,0.28); }
+        .btn-download:hover { background: #9e4863; }
+        #result-screen { display: none; padding: 40px 20px; text-align: center; }
+        .score-box { padding: 20px 26px; background: white; border-radius: 10px; min-width: 170px; box-shadow: 0 2px 10px rgba(15,28,63,0.08); display: inline-block; margin: 10px; border-top: 4px solid var(--accent); }
+        .sync-banner { max-width: 820px; margin: 15px auto; padding: 12px 18px; border-radius: 6px; font-weight: 600; font-size: 0.95rem; }
+        .sync-loading { background: #fff8e6; color: #8a6d3b; border: 1px solid #faebcc; }
+        .sync-ok { background: #eafaf1; color: #1e8449; border: 1px solid #d4efdf; }
+        .sync-err { background: #fdedec; color: #c0392b; border: 1px solid #fadbd8; }
+        .review-card { background: white; padding: 24px; margin-bottom: 20px; border-radius: 10px; text-align: left; border-left: 6px solid var(--accent); box-shadow: 0 2px 10px rgba(15,28,63,0.06); }
+        .review-opt { padding: 9px 13px; margin: 6px 0; border-radius: 6px; background: #f9fafb; border: 1px solid #e5e7eb; font-size: 0.93rem; line-height: 1.55; }
+        .review-opt.user-picked { border: 2px solid var(--primary); background: #eef2ff; }
+        .review-opt.correct-opt { border-left: 4px solid var(--success); background: #eafaf1; }
+        .badge-topic { display: inline-block; background: var(--primary); color: var(--cream); padding: 4px 10px; border-radius: 4px; font-size: 0.78rem; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.3px; }
+        .pembahasan-box { margin-top: 14px; font-size: 0.94rem; background: var(--cream); padding: 16px; border-radius: 8px; line-height: 1.65; color: #1f2937; border: 1px solid #ece3e6; }
+        .pembahasan-box p { margin: 0 0 10px 0; }
+        .pembahasan-box p:last-child { margin-bottom: 0; }
+        .err-msg { color: var(--danger); font-size: 0.85rem; margin-top: 8px; display: none; font-weight: 600; }
+        @media (max-width: 820px) { .main-container { flex-direction: column; } .sidebar { width: 100%; position: static; } }
+    </style>
+</head>
+<body>
+
+<header>PERSONA RESEARCH & CONSULTING<small>TES PENGUASAAN MATERI TES KEPRIBADIAN (TKP) — PERSIAPAN SELEKSI POLRI</small></header>
+
+<div id="login-screen" style="flex:1; display:flex; align-items:center; justify-content:center; padding:15px;">
+    <div style="background:white; padding:40px; border-radius:10px; width:100%; max-width:430px; text-align:center; box-shadow: 0 4px 16px rgba(15,28,63,0.1); border-top: 5px solid var(--accent);">
+        <h2 style="margin-top:0; color:var(--primary);">Registrasi Peserta Tes Teori TKP</h2>
+        <p style="font-size:0.88rem; color:#4b5563; margin-bottom:20px; line-height:1.5;">Ujian Teori & Konsep Penguasaan Materi TKP Polri (50 Butir Soal). Masukkan nama lengkap Anda untuk memulai.</p>
+        <div style="text-align:left; margin-bottom:14px;">
+            <label for="pName" style="font-size:0.85rem; font-weight:bold; color:var(--primary); display:block; margin-bottom:5px;">Nama Lengkap Peserta:</label>
+            <input type="text" id="pName" placeholder="Contoh: Budi Santoso" style="width:100%; padding:12px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:1rem;" autocomplete="name">
+            <div id="login-err" class="err-msg">Silakan isi nama lengkap minimal 3 karakter terlebih dahulu.</div>
+        </div>
+        <button type="button" id="btn-start" class="btn btn-primary">MULAI UJIAN TEORI TKP</button>
+    </div>
+</div>
+
+<div class="main-container" id="exam-container">
+    <div class="content-area">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; font-size:0.88rem; color:#4b5563; border-bottom:1px solid #e5e7eb; padding-bottom:10px;">
+            <span id="peserta-badge" style="font-weight:700; color:var(--primary);"></span>
+            <span id="progress-badge">Terjawab: 0 / 50</span>
+        </div>
+        <div id="q-text" class="q-text"></div>
+        <div id="options"></div>
+        <div style="display:flex; gap:10px; margin-top: 20px;">
+            <button class="btn btn-primary" type="button" id="btn-prev" style="width: 50%;">Kembali</button>
+            <button class="btn btn-primary" type="button" id="btn-next" style="width: 50%;">Selanjutnya</button>
+        </div>
+    </div>
+    <div class="sidebar">
+        <h4 style="margin-top:0; color:var(--primary);">Navigasi Soal (50 Butir)</h4>
+        <div class="nav-grid" id="nav-grid"></div>
+        <button id="btn-finish" class="btn btn-primary" type="button" style="margin-top:25px; background:#1e8449; color:white;">SELESAI & KIRIM</button>
+    </div>
+</div>
+
+<div id="result-screen">
+    <h1 id="res-name" style="color:var(--primary); margin-bottom: 8px;"></h1>
+    <div id="sync-status" class="sync-banner sync-loading">Menyimpan hasil tes teori ke database MASTER PRC...</div>
+    <div id="score-area"></div>
+    <div id="eval-box" style="max-width:820px; margin:20px auto; background:white; padding:22px; border-radius:10px; box-shadow:0 2px 10px rgba(15,28,63,0.06); text-align:left;"></div>
+
+    <div style="max-width:820px; margin:20px auto; background:var(--cream); border:1.5px solid #e5d8dc; border-radius:10px; padding:20px;">
+        <h3 style="margin:0 0 6px 0; color:var(--primary); font-size:1.05rem;">Unduh Hasil Ujian & Pembahasan</h3>
+        <p style="margin:0 0 14px 0; font-size:0.88rem; color:#4b5563;">Simpan arsip lengkap soal teori, kunci jawaban, skor Anda, serta pembahasan komprehensif.</p>
+        <button class="btn btn-download" type="button" id="btn-dl-html">Unduh Pembahasan Lengkap (.HTML)</button>
+    </div>
+
+    <div id="review-list" style="max-width:820px; margin:20px auto;"></div>
+</div>
+
+<script>
+(function() {
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyFxmO0ocvr5HqK2WuGyjt7_JeTOcs4vGDg7QZejeiE2QvCP_qkonJcZc5hz9AFW2Vg/exec";
+    const TOTAL_SOAL = 50;
+
+    let currentIdx = 0;
+    let questions = [];
+    let userSelections = {};
+    let pName = "";
+    let sessionId = "";
+    let startTimeObj = null;
+    let isSubmitting = false;
+    let isSubmitted = false;
+    let finalReportData = null;
+    let lastPayload = null;
+
+    // 50 SOAL TEORI TKP POLRI (Distribusi Lengkap & Kunci Terdistribusi Merata)
+    const rawData = [
+        // --- KELOMPOK A: Tujuan dan fungsi TKP (6 Soal: 1-6) ---
+        {
+            "id": 1,
+            "materi": "Tujuan dan fungsi TKP",
+            "kesulitan": "Mudah",
+            "kunci": "B",
+            "q": "Tes kepribadian dalam persiapan seleksi POLRI pada prinsipnya bertujuan untuk ....",
+            "opts": [
+                {"t": "Mengukur kemampuan seseorang dalam menghafalkan undang-undang.", "k": "A"},
+                {"t": "Mengetahui kecenderungan karakter dan perilaku seseorang berdasarkan standar abdi negara.", "k": "B"},
+                {"t": "Mengukur ketahanan fisik, kecepatan lari, dan kekuatan otot.", "k": "C"},
+                {"t": "Menentukan tingkat penguasaan pengetahuan umum dan wawasan kebangsaan.", "k": "D"},
+                {"t": "Mengukur kemampuan penalaran logika matematika dan hitung cepat.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "B",
+                "penjelasan": "Tes kepribadian (TKP) bertujuan untuk memetakan kecenderungan karakter, integritas, dan pola perilaku calon anggota agar sesuai dengan profil abdi negara.",
+                "konsep": "Tujuan utama tes kepribadian adalah menilai kesesuaian psikologis dan karakter pelamar dengan nilai-nilai institusi.",
+                "salah": "Pilihan A, C, D, dan E masing-masing mengukur aspek akademik, kesamaptaan fisik, atau inteligensi umum, bukan kepribadian.",
+                "kesimpulan": "TKP adalah instrumen pengukur karakter dan perilaku, bukan pengetahuan akademik atau fisik."
+            }
+        },
+        {
+            "id": 2,
+            "materi": "Tujuan dan fungsi TKP",
+            "kesulitan": "Mudah",
+            "kunci": "C",
+            "q": "Mengapa karakter menjadi salah satu aspek yang sangat krusial dalam seleksi calon abdi negara?",
+            "opts": [
+                {"t": "Karena karakter dapat diubah dengan cepat melalui pelatihan singkat di tempat kerja.", "k": "A"},
+                {"t": "Karena karakter menentukan kecepatan peserta dalam menyelesaikan laporan administratif.", "k": "B"},
+                {"t": "Karena karakter yang kuat dan berintegritas menentukan kualitas pelayanan serta amanah pengayoman kepada masyarakat.", "k": "C"},
+                {"t": "Karena tanpa karakter yang baik, peserta tidak akan bisa lulus ujian kesamaptaan jasmani.", "k": "D"},
+                {"t": "Karena aspek karakter memiliki bobot nilai tertinggi dalam kelulusan tes akademik.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "C",
+                "penjelasan": "Karakter adalah fondasi moral yang memastikan seseorang menjalankan tugas penegakan hukum dan pelayanan dengan jujur, adil, serta bertanggung jawab.",
+                "konsep": "Karakter menentukan arah tindakan etis seorang abdi negara ketika dihadapkan pada situasi dilematis.",
+                "salah": "Pilihan A, B, D, dan E tidak tepat karena mengaitkan karakter dengan hal teknis atau fisik semata.",
+                "kesimpulan": "Kualitas moral dan integritas (karakter) merupakan jiwa utama pengabdian abdi negara."
+            }
+        },
+        {
+            "id": 3,
+            "materi": "Tujuan dan fungsi TKP",
+            "kesulitan": "Sedang",
+            "kunci": "A",
+            "q": "Apa yang menjadi fokus utama yang ingin diketahui melalui pengukuran kepribadian dalam seleksi abdi negara?",
+            "opts": [
+                {"t": "Pola respons mental dan perilaku konsisten seseorang dalam menghadapi situasi pelayanan, tekanan, dan tanggung jawab.", "k": "A"},
+                {"t": "Seberapa banyak teori psikologi yang dihafal oleh peserta ujian.", "k": "B"},
+                {"t": "Kemampuan peserta dalam memanipulasi jawaban agar terlihat sempurna di mata penguji.", "k": "C"},
+                {"t": "Tingkat kecepatan berpikir analitis dalam memecahkan rumus matematika rumit.", "k": "D"},
+                {"t": "Keluasan jaringan sosial yang dimiliki peserta di luar lingkungan kedinasan.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "A",
+                "penjelasan": "Pengukuran kepribadian memotret konsistensi perilaku, stabilitas emosi, dan orientasi pelayanan seseorang.",
+                "konsep": "Kepribadian tercermin dari pola reaksi mental dan tindakan nyata yang konsisten.",
+                "salah": "Pilihan B, C, D, dan E salah karena mengasumsikan tes kepribadian mengukur hafalan, manipulasi, atau matematika.",
+                "kesimpulan": "Fokus TKP adalah konsistensi pola perilaku dan kesiapan mental menghadapi dinamika tugas."
+            }
+        },
+        {
+            "id": 4,
+            "materi": "Tujuan dan fungsi TKP",
+            "kesulitan": "Sedang",
+            "kunci": "C",
+            "q": "Mengapa tes kepribadian tidak sekadar mengukur tingkat kecerdasan intelektual (IQ) atau pengetahuan semata?",
+            "opts": [
+                {"t": "Karena kecerdasan intelektual tidak penting sama sekali dalam dunia kedinasan.", "k": "A"},
+                {"t": "Karena pengetahuan umum sudah diuji secara terpisah dalam tes akademik.", "k": "B"},
+                {"t": "Karena peserta yang cerdas belum tentu memiliki moral, integritas, dan kemampuan mengendalikan emosi yang baik saat bertugas.", "k": "C"},
+                {"t": "Karena kecerdasan mudah dimanipulasi, sedangkan kepribadian tidak dapat diukur sama sekali.", "k": "D"},
+                {"t": "Karena aturan seleksi mewajibkan porsi tes kepribadian lebih besar daripada tes lainnya.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "C",
+                "penjelasan": "Orang yang cerdas secara akademik belum tentu memiliki kejujuran, empati, dan pengendalian diri yang baik. Oleh karena itu, aspek kepribadian diuji terpisah.",
+                "konsep": "Kecerdasan tanpa moral dan integritas berisiko disalahgunakan.",
+                "salah": "Pilihan D salah karena kepribadian dapat diukur melalui instrumen psikologis yang terstandar.",
+                "kesimpulan": "Kecerdasan intelektual harus diimbangi dengan kematangan kepribadian dan integritas."
+            }
+        },
+        {
+            "id": 5,
+            "materi": "Tujuan dan fungsi TKP",
+            "kesulitan": "Sulit",
+            "kunci": "E",
+            "q": "Apa fungsi utama dari pelaksanaan tes kepribadian dalam mengenali karakteristik calon anggota?",
+            "opts": [
+                {"t": "Menentukan peringkat mutlak peserta berdasarkan tingkat kekayaan dan latar belakang keluarganya.", "k": "A"},
+                {"t": "Menyaring peserta yang memiliki ambisi pribadi tertinggi untuk menduduki jabatan struktural.", "k": "B"},
+                {"t": "Menghilangkan seluruh potensi konflik di dalam organisasi secara instan.", "k": "C"},
+                {"t": "Menilai tingkat kecepatan hafalan peserta terhadap peraturan disiplin institusi.", "k": "D"},
+                {"t": "Memfilter calon yang memiliki kecenderungan perilaku berisiko serta memilih individu yang selaras dengan nilai integritas dan pengayoman.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "E",
+                "penjelasan": "Fungsi diagnostik tes kepribadian adalah memfilter risiko perilaku negatif serta memilih kandidat yang memiliki keselarasan nilai dengan institusi.",
+                "konsep": "Fungsi preventif seleksi psikologi adalah mencegah masuknya individu berisiko moral.",
+                "salah": "Pilihan A, B, C, dan D tidak mencerminkan fungsi psikologis kepribadian.",
+                "kesimpulan": "Tes kepribadian berfungsi sebagai saringan moral dan perilaku untuk menjaga marwah organisasi."
+            }
+        },
+        {
+            "id": 6,
+            "materi": "Tujuan dan fungsi TKP",
+            "kesulitan": "Sulit",
+            "kunci": "B",
+            "q": "Manakah pernyataan yang paling tepat menggambarkan manfaat memahami karakter yang diharapkan dari seorang abdi negara bagi peserta seleksi?",
+            "opts": [
+                {"t": "Peserta dapat menghafal seluruh kunci jawaban soal dengan mudah tanpa perlu berpikir.", "k": "A"},
+                {"t": "Peserta dapat menyelaraskan pola pikir dan orientasi perilakunya agar sesuai dengan standar pelayanan publik dan integritas organisasi.", "k": "B"},
+                {"t": "Peserta dapat menghindari semua bentuk penugasan lapangan yang berisiko tinggi.", "k": "C"},
+                {"t": "Peserta dapat memastikan dirinya selalu menjadi yang paling unggul dalam ujian fisik.", "k": "D"},
+                {"t": "Peserta tidak perlu lagi mengikuti pelatihan lanjutan setelah diterima bekerja.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "B",
+                "penjelasan": "Memahami profil karakter abdi negara membantu peserta mengarahkan pola pikir, empati, dan integritasnya sesuai tuntutan profesi penegak hukum.",
+                "konsep": "Pemahaman materi membentuk kesadaran perilaku yang otentik dan selaras dengan tugas kedinasan.",
+                "salah": "Pilihan A, C, D, dan E menyimpang dari esensi pembinaan karakter.",
+                "kesimpulan": "Pemahaman materi TKP membimbing peserta memiliki orientasi mental yang tepat sebagai abdi negara."
+            }
+        },
+
+        // --- KELOMPOK B: Tujuh kriteria karakter abdi negara (10 Soal: 7-16) ---
+        {
+            "id": 7,
+            "materi": "Tujuh kriteria karakter abdi negara",
+            "kesulitan": "Mudah",
+            "kunci": "D",
+            "q": "Manakah di bawah ini yang TIDAK termasuk ke dalam tujuh kriteria pokok karakter abdi negara?",
+            "opts": [
+                {"t": "Disiplin", "k": "A"},
+                {"t": "Jujur", "k": "B"},
+                {"t": "Sabar", "k": "C"},
+                {"t": "Individualistis", "k": "D"},
+                {"t": "Setia pada organisasi", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "D",
+                "penjelasan": "Individualistis bukan merupakan kriteria karakter abdi negara; yang benar adalah memiliki jiwa sosial yang tinggi, patuh aturan, percaya diri, dll.",
+                "konsep": "Tujuh kriteria pokok meliputi: Disiplin, Jujur, Sabar, Percaya diri, Jiwa sosial tinggi, Patuh pada aturan, dan Setia pada organisasi.",
+                "salah": "Pilihan A, B, C, dan E adalah bagian dari tujuh kriteria pokok karakter.",
+                "kesimpulan": "Karakter abdi negara bersifat kolaboratif dan mengutamakan kepentingan bersama, bukan individualistis."
+            }
+        },
+        {
+            "id": 8,
+            "materi": "Tujuh kriteria karakter abdi negara",
+            "kesulitan": "Mudah",
+            "kunci": "A",
+            "q": "Mengapa kedisiplinan menjadi salah satu pilar utama yang sangat penting dalam lingkungan organisasi abdi negara?",
+            "opts": [
+                {"t": "Karena kedisiplinan memastikan seluruh operasional berjalan tertib, konsisten, dan mematuhi standar prosedur yang berlaku.", "k": "A"},
+                {"t": "Karena disiplin membuat anggota terbebas dari segala bentuk tanggung jawab laporan.", "k": "B"},
+                {"t": "Karena disiplin merupakan satu-satunya ukuran kecerdasan intelektual seseorang.", "k": "C"},
+                {"t": "Karena kedisiplinan hanya diperlukan saat ada inspeksi mendadak dari pimpinan tinggi.", "k": "D"},
+                {"t": "Karena disiplin menghilangkan kebutuhan akan kerja sama tim.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "A",
+                "penjelasan": "Kedisiplinan menjamin kepatuhan terhadap SOP dan keteraturan operasional institusi.",
+                "konsep": "Disiplin adalah kunci konsistensi kinerja dan keteraturan sistem.",
+                "salah": "Pilihan B, C, D, dan E salah secara konsep organisasi.",
+                "kesimpulan": "Disiplin menciptakan keteraturan dan keandalan operasional satuan."
+            }
+        },
+        {
+            "id": 9,
+            "materi": "Tujuh kriteria karakter abdi negara",
+            "kesulitan": "Sedang",
+            "kunci": "E",
+            "q": "Apa makna integritas dan kejujuran dalam konteks pelaksanaan tugas seorang abdi negara?",
+            "opts": [
+                {"t": "Berani mengakui kesalahan hanya ketika diawasi oleh kamera pengawas.", "k": "A"},
+                {"t": "Menyembunyikan informasi penting demi keuntungan kelompok internal.", "k": "B"},
+                {"t": "Melakukan segala cara agar target pribadi tercapai dengan cepat.", "k": "C"},
+                {"t": "Menyesuaikan kejujuran berdasarkan besar kecilnya tekanan dari pihak luar.", "k": "D"},
+                {"t": "Kesesuaian antara ucapan, tindakan, dan prinsip moral yang lurus tanpa korupsi atau penyimpangan.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "E",
+                "penjelasan": "Integritas dan kejujuran menuntut keselarasan mutlak antara hati nurani, perkataan, dan perbuatan yang bersih dari penyimpangan.",
+                "konsep": "Integritas adalah melakukan hal yang benar meskipun tidak ada orang yang melihat.",
+                "salah": "Pilihan A, B, C, dan D mencerminkan perilaku tidak jujur atau manipulatif.",
+                "kesimpulan": "Kejujuran dan integritas adalah harga mati bagi seorang abdi negara."
+            }
+        },
+        {
+            "id": 10,
+            "materi": "Tujuh kriteria karakter abdi negara",
+            "kesulitan": "Sedang",
+            "kunci": "B",
+            "q": "Apa perbedaaan mendasar antara rasa percaya diri yang sehat dengan sikap arogan?",
+            "opts": [
+                {"t": "Percaya diri selalu merendahkan orang lain, sedangkan arogan menghargai sesama.", "k": "A"},
+                {"t": "Percaya diri didasari keyakinan kompetensi yang disertai kerendahan hati, sedangkan arogan meremehkan orang lain dan merasa paling unggul.", "k": "B"},
+                {"t": "Percaya diri hanya muncul saat dipuji, sedangkan arogan muncul saat dimarahi.", "k": "C"},
+                {"t": "Tidak ada perbedaan sama sekali di antara kedua istilah tersebut.", "k": "D"},
+                {"t": "Arogan merupakan bentuk tertinggi dari rasa percaya diri profesional.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "B",
+                "penjelasan": "Percaya diri berakar dari kompetensi dan sikap menghargai orang lain, sementara arogan berakar dari kesombongan dan merendahkan pihak lain.",
+                "konsep": "Kepercayaan diri sejati bersifat inklusif dan matang secara emosional.",
+                "salah": "Pilihan A, C, D, dan E keliru mendefinisikan konsep psikologis.",
+                "kesimpulan": "Abdi negara yang percaya diri senantiasa rendah hati dalam bertindak."
+            }
+        },
+        {
+            "id": 11,
+            "materi": "Tujuh kriteria karakter abdi negara",
+            "kesulitan": "Sedang",
+            "kunci": "C",
+            "q": "Mengapa kesabaran sangat diperlukan ketika seorang petugas menghadapi tekanan dan emosi masyarakat di lapangan?",
+            "opts": [
+                {"t": "Agar petugas bisa menghindari penyelesaian tugas dengan cepat.", "k": "A"},
+                {"t": "Agar petugas dapat membalas kemarahan warga dengan nada yang setara.", "k": "B"},
+                {"t": "Agar petugas mampu meredam konflik, berpikir jernih, dan mengambil keputusan yang proporsional di tengah situasi panas.", "k": "C"},
+                {"t": "Agar masyarakat merasa takut dan menyerah pada instruksi petugas.", "k": "D"},
+                {"t": "Agar petugas memiliki alasan untuk menunda pelayanan publik.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "C",
+                "penjelasan": "Kesabaran adalah perisai emosional yang menjaga petugas agar tidak terpancing provokasi serta mampu mengendalikan situasi krisis.",
+                "konsep": "Kesabaran profesional meredakan eskalasi konflik di ruang publik.",
+                "salah": "Pilihan A, B, D, dan E justru memicu perburukan situasi.",
+                "kesimpulan": "Kesabaran adalah kunci utama meredam ketegangan dan menegakkan kewibawaan secara humanis."
+            }
+        },
+        {
+            "id": 12,
+            "materi": "Tujuh kriteria karakter abdi negara",
+            "kesulitan": "Sedang",
+            "kunci": "D",
+            "q": "Apa makna loyalitas yang benar terhadap organisasi dalam kerangka kedinasan abdi negara?",
+            "opts": [
+                {"t": "Kepatuhan buta terhadap segala perintah atasan meskipun melanggar hukum dan etika.", "k": "A"},
+                {"t": "Membela rekan kerja yang melakukan pelanggaran berat demi solidaritas kelompok.", "k": "B"},
+                {"t": "Menutupi segala kekurangan instansi dari audit pengawasan eksternal.", "k": "C"},
+                {"t": "Pengabdian tulus, kepatuhan pada aturan yang sah, serta dedikasi menjaga kehormatan dan kemajuan institusi.", "k": "D"},
+                {"t": "Kesetiaan yang hanya diberikan kepada pimpinan tertentu yang berjasa secara pribadi.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "D",
+                "penjelasan": "Loyalitas institusional berarti mengabdi pada visi, misi, dan aturan organisasi yang sah, bukan loyalitas buta pada individu yang melanggar hukum.",
+                "konsep": "Loyalitas sejati bermuara pada kehormatan dan kepatuhan hukum institusi.",
+                "salah": "Pilihan A, B, C, dan E adalah bentuk loyalitas sempit yang menyimpang dari etika profesi.",
+                "kesimpulan": "Loyalitas abdi negara berlandaskan pada konstitusi, aturan, dan kehormatan organisasi."
+            }
+        },
+        {
+            "id": 13,
+            "materi": "Tujuh kriteria karakter abdi negara",
+            "kesulitan": "Sulit",
+            "kunci": "A",
+            "q": "Apakah loyalitas terhadap organisasi berarti seorang anggota harus menutupi kesalahan atau pelanggaran hukum yang dilakukan rekan seunitnya?",
+            "opts": [
+                {"t": "Tidak, karena loyalitas yang benar adalah menegakkan kebenaran dan integritas organisasi, bukan menutupi pelanggaran yang merusak institusi.", "k": "A"},
+                {"t": "Ya, karena solidaritas tim di atas segalanya tanpa memandang hukum.", "k": "B"},
+                {"t": "Ya, asalkan pelanggaran tersebut tidak diketahui oleh masyarakat umum.", "k": "C"},
+                {"t": "Tidak peduli, karena pelanggaran rekan kerja bukan urusan sesama anggota.", "k": "D"},
+                {"t": "Ya, demi menjaga nama baik unit dari sanksi pimpinan tertinggi.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "A",
+                "penjelasan": "Menutupi kejahatan atau pelanggaran rekan bukanlah loyalitas, melainkan persekongkolan jahat yang merusak nama baik institusi.",
+                "konsep": "Loyalitas substantif menuntut keberanian meluruskan penyimpangan demi kebaikan organisasi.",
+                "salah": "Pilihan B, C, dan E mengarah pada pelanggaran etika dan hukum.",
+                "kesimpulan": "Loyalitas tertinggi diberikan kepada kebenaran dan institusi, bukan kepada pelanggaran oknum."
+            }
+        },
+        {
+            "id": 14,
+            "materi": "Tujuh kriteria karakter abdi negara",
+            "kesulitan": "Sulit",
+            "kunci": "B",
+            "q": "Bagaimana hubungan antara kepatuhan terhadap aturan dengan rasa tanggung jawab seseorang?",
+            "opts": [
+                {"t": "Kepatuhan aturan menghilangkan seluruh rasa tanggung jawab pribadi.", "k": "A"},
+                {"t": "Kepatuhan terhadap aturan adalah wujud nyata dari rasa tanggung jawab dalam memastikan tugas diselesaikan sesuai standar etika dan hukum.", "k": "B"},
+                {"t": "Aturan dibuat hanya untuk dilanggar oleh individu yang memiliki tanggung jawab tinggi.", "k": "C"},
+                {"t": "Tanggung jawab jauh lebih penting daripada aturan tertulis apa pun.", "k": "D"},
+                {"t": "Kepatuhan aturan hanya berlaku jika ada sanksi tegas di belakangnya.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "B",
+                "penjelasan": "Seseorang yang bertanggung jawab akan selalu menjadikan aturan sebagai pedoman operasional kerjanya.",
+                "konsep": "Kepatuhan dan tanggung jawab berjalan seiring dalam mewujudkan tata kelola profesional.",
+                "salah": "Pilihan A, C, D, dan E memisahkan atau meremehkan fungsi aturan.",
+                "kesimpulan": "Kepatuhan aturan adalah cerminan konkret dari akuntabilitas dan tanggung jawab moral."
+            }
+        },
+        {
+            "id": 15,
+            "materi": "Tujuh kriteria karakter abdi negara",
+            "kesulitan": "Sulit",
+            "kunci": "C",
+            "q": "Manakah bentuk pemahaman prinsip yang paling tepat mengenai kriteria 'memiliki jiwa sosial yang tinggi' bagi seorang abdi negara?",
+            "opts": [
+                {"t": "Memberikan bantuan kepada masyarakat semata-mata untuk mendapatkan publisitas media.", "k": "A"},
+                {"t": "Mengutamakan kepentingan golongan sendiri di atas kepentingan masyarakat luas.", "k": "B"},
+                {"t": "Menunjukkan empati, kepedulian tulus, dan kesediaan menolong kelompok masyarakat yang membutuhkan tanpa pamrih.", "k": "C"},
+                {"t": "Menyerahkan seluruh gaji pribadi untuk kegiatan amal di luar instansi.", "k": "D"},
+                {"t": "Hanya peduli pada warga yang memberikan imbalan jasa.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "C",
+                "penjelasan": "Jiwa sosial yang tinggi ditandai oleh empati murni dan kesiapan melayani masyarakat tanpa pamrih pribadi.",
+                "konsep": "Pengabdian sosial berbasis pada ketulusan empati kemanusiaan.",
+                "salah": "Pilihan A, B, D, dan E mencerminkan pamrih atau sikap diskriminatif.",
+                "kesimpulan": "Jiwa sosial abdi negara berakar dari ketulusan melayani dan melindungi sesama."
+            }
+        },
+        {
+            "id": 16,
+            "materi": "Tujuh kriteria karakter abdi negara",
+            "kesulitan": "Sulit",
+            "kunci": "D",
+            "q": "Mengapa kriteria sabar dalam menghadapi tekanan operasional harus dimiliki oleh seorang calon anggota penegak hukum?",
+            "opts": [
+                {"t": "Agar ia dibebaskan dari tugas-tugas lapangan yang berat.", "k": "A"},
+                {"t": "Agar ia dapat menghindari konfrontasi dengan melarikan diri dari masalah.", "k": "B"},
+                {"t": "Agar ia selalu menuruti kemauan pihak yang sedang melakukan pelanggaran.", "k": "C"},
+                {"t": "Agar ia tetap dapat berpikir objektif, tidak emosional, dan mengambil tindakan tegas yang terukur di bawah tekanan ekstrem.", "k": "D"},
+                {"t": "Agar kinerjanya dinilai lambat namun aman dari kesalahan administratif.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "D",
+                "penjelasan": "Kesabaran profesional menjaga stabilitas mental agar petugas tidak gegabah dalam mengambil keputusan di situasi berisiko.",
+                "konsep": "Ketahanan emosi di bawah tekanan adalah syarat mutlak penegakan hukum yang adil.",
+                "salah": "Pilihan A, B, C, dan E salah menafsirkan esensi kesabaran profesional.",
+                "kesimpulan": "Sabar dalam tugas bukan berarti pasif, melainkan ketenangan mengendalikan diri untuk bertindak secara tepat."
+            }
+        },
+
+        // --- KELOMPOK C: Empat dimensi pengukuran TKP (10 Soal: 17-26) ---
+        {
+            "id": 17,
+            "materi": "Empat dimensi pengukuran TKP",
+            "kesulitan": "Mudah",
+            "kunci": "E",
+            "q": "Berapa jumlah dimensi utama dalam kerangka pengukuran Tes Kepribadian (TKP) berdasarkan materi latihan ini?",
+            "opts": [
+                {"t": "2 Dimensi", "k": "A"},
+                {"t": "3 Dimensi", "k": "B"},
+                {"t": "5 Dimensi", "k": "C"},
+                {"t": "7 Dimensi", "k": "D"},
+                {"t": "4 Dimensi", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "E",
+                "penjelasan": "Materi TKP menetapkan tepat 4 dimensi utama pengukuran, yaitu Prososial, Kepercayaan Diri, Pengendalian Diri, dan Penyesuaian Diri.",
+                "konsep": "Empat pilar dimensi pengukuran perilaku.",
+                "salah": "Pilihan A, B, C, dan D tidak sesuai dengan jumlah dimensi yang ditetapkan.",
+                "kesimpulan": "Struktur penilaian TKP didasarkan pada 4 dimensi utama."
+            }
+        },
+        {
+            "id": 18,
+            "materi": "Empat dimensi pengukuran TKP",
+            "kesulitan": "Mudah",
+            "kunci": "A",
+            "q": "Dimensi pengukuran apakah yang secara khusus mengukur kepedulian, empati, kerja sama, dan orientasi terhadap kepentingan bersama?",
+            "opts": [
+                {"t": "Prososial", "k": "A"},
+                {"t": "Kepercayaan Diri", "k": "B"},
+                {"t": "Pengendalian Diri", "k": "C"},
+                {"t": "Penyesuaian Diri", "k": "D"},
+                {"t": "Intelektual", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "A",
+                "penjelasan": "Dimensi Prososial mengukur sejauh mana seseorang memiliki kepedulian, empati, dan orientasi menolong kepentingan bersama.",
+                "konsep": "Definisi dimensi Prososial.",
+                "salah": "Pilihan B, C, D, dan E mengukur aspek mental, emosi, atau adaptasi yang berbeda.",
+                "kesimpulan": "Dimensi Prososial berfokus pada kepedulian sosial dan kerja sama."
+            }
+        },
+        {
+            "id": 19,
+            "materi": "Empat dimensi pengukuran TKP",
+            "kesulitan": "Sedang",
+            "kunci": "B",
+            "q": "Dimensi apa yang mengukur kemampuan mengendalikan emosi, kesabaran, integritas, dan pengendalian impuls?",
+            "opts": [
+                {"t": "Prososial", "k": "A"},
+                {"t": "Pengendalian Diri", "k": "B"},
+                {"t": "Kepercayaan Diri", "k": "C"},
+                {"t": "Penyesuaian Diri", "k": "D"},
+                {"t": "Kreativitas", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "B",
+                "penjelasan": "Dimensi Pengendalian Diri menilai kapasitas seseorang dalam mengelola emosi, kesabaran, dan menahan impuls negatif.",
+                "konsep": "Definisi dimensi Pengendalian Diri.",
+                "salah": "Pilihan A, C, D, dan E merupakan dimensi atau konsep yang berbeda.",
+                "kesimpulan": "Pengendalian diri adalah pengukur stabilitas emosi dan integritas moral."
+            }
+        },
+        {
+            "id": 20,
+            "materi": "Empat dimensi pengukuran TKP",
+            "kesulitan": "Sedang",
+            "kunci": "C",
+            "q": "Apa yang dimaksud dengan dimensi Penyesuaian Diri dalam instrumen pengukuran TKP?",
+            "opts": [
+                {"t": "Kemampuan memaksakan kehendak pribadi kepada lingkungan kerja yang baru.", "k": "A"},
+                {"t": "Kecenderungan untuk menolak segala bentuk perubahan teknologi dan aturan.", "k": "B"},
+                {"t": "Kemampuan beradaptasi, menerima perubahan, menerima masukan, dan menjalankan tanggung jawab dalam lingkungan organisasi.", "k": "C"},
+                {"t": "Keberanian mengambil keputusan tanpa memedulikan dampak sosial.", "k": "D"},
+                {"t": "Kapasitas menghafal seluruh regulasi birokrasi dalam waktu singkat.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "C",
+                "penjelasan": "Penyesuaian diri mengukur keluwesan adaptasi, penerimaan terhadap perubahan, serta kemampuan menyelaraskan diri dengan dinamika organisasi.",
+                "konsep": "Definisi dimensi Penyesuaian Diri.",
+                "salah": "Pilihan A, B, D, dan E bertentangan dengan prinsip adaptasi positif.",
+                "kesimpulan": "Penyesuaian diri mencerminkan keluwesan dan ketahanan berorganisasi."
+            }
+        },
+        {
+            "id": 21,
+            "materi": "Empat dimensi pengukuran TKP",
+            "kesulitan": "Sedang",
+            "kunci": "D",
+            "q": "Indikator apakah yang paling tepat berkaitan langsung dengan dimensi Kepercayaan Diri?",
+            "opts": [
+                {"t": "Kemampuan meredam amarah saat dikritik atasan.", "k": "A"},
+                {"t": "Tingkat empati kepada korban bencana alam.", "k": "B"},
+                {"t": "Kecepatan menyesuaikan diri dengan aplikasi digital baru.", "k": "C"},
+                {"t": "Keyakinan terhadap kemampuan diri, keberanian mengambil keputusan, inisiatif, dan kemandirian.", "k": "D"},
+                {"t": "Kepatuhan mutlak terhadap aturan jam kerja instansi.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "D",
+                "penjelasan": "Kepercayaan diri diukur melalui keyakinan kompetensi, keberanian mengambil inisiatif, dan kesanggupan memikul tanggung jawab.",
+                "konsep": "Indikator utama Kepercayaan Diri.",
+                "salah": "Pilihan A, B, C, and E adalah indikator untuk dimensi pengendalian diri, prososial, atau penyesuaian diri.",
+                "kesimpulan": "Kepercayaan diri ditunjukkan lewat inisiatif dan keyakinan bertanggung jawab."
+            }
+        },
+        {
+            "id": 22,
+            "materi": "Empat dimensi pengukuran TKP",
+            "kesulitan": "Sedang",
+            "kunci": "E",
+            "q": "Manakah di bawah ini yang BUKAN merupakan indikator dari dimensi Penyesuaian Diri?",
+            "opts": [
+                {"t": "Kemampuan beradaptasi dengan lingkungan baru", "k": "A"},
+                {"t": "Keterbukaan dalam menerima masukan dan kritik", "k": "B"},
+                {"t": "Kesiapan menghadapi perubahan prosedur kerja", "k": "C"},
+                {"t": "Menjalankan tanggung jawab di tengah dinamika organisasi", "k": "D"},
+                {"t": "Pengendalian impuls dan amarah di bawah tekanan fisik", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "E",
+                "penjelasan": "Pengendalian impuls dan amarah merupakan indikator dari dimensi Pengendalian Diri, bukan Penyesuaian Diri.",
+                "konsep": "Pembedaan indikator antar-dimensi TKP.",
+                "salah": "Pilihan A, B, C, dan D adalah indikator murni dari dimensi Penyesuaian Diri.",
+                "kesimpulan": "Setiap dimensi memiliki indikator spesifik yang harus dipahami secara akurat."
+            }
+        },
+        {
+            "id": 23,
+            "materi": "Empat dimensi pengukuran TKP",
+            "kesulitan": "Sulit",
+            "kunci": "A",
+            "q": "Apa perbedaan esensial antara dimensi Kepercayaan Diri dan dimensi Pengendalian Diri?",
+            "opts": [
+                {"t": "Kepercayaan diri berfokus pada keyakinan dan keberanian mengambil inisiatif, sedangkan pengendalian diri berfokus pada kestabilan emosi dan penahanan impuls.", "k": "A"},
+                {"t": "Kepercayaan diri berkaitan dengan kepedulian sosial, sedangkan pengendalian diri berkaitan dengan adaptasi teknologi.", "k": "B"},
+                {"t": "Tidak ada perbedaan mendasar karena keduanya mengukur hal yang sama persis.", "k": "C"},
+                {"t": "Kepercayaan diri hanya diukur saat ujian tertulis, sedangkan pengendalian diri diukur saat wawancara.", "k": "D"},
+                {"t": "Pengendalian diri menuntut keberanian tampil di muka umum, sedangkan kepercayaan diri menuntut kesabaran.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "A",
+                "penjelasan": "Kepercayaan diri mendorong inisiatif dan keberanian, sementara pengendalian diri menjaga batasan moral dan kestabilan emosional.",
+                "konsep": "Analisis perbedaan fungsi psikologis antardimensi.",
+                "salah": "Pilihan B, C, D, dan E salah secara konseptual.",
+                "kesimpulan": "Kepercayaan diri dan pengendalian diri saling melengkapi dalam membentuk kematangan mental abdi negara."
+            }
+        },
+        {
+            "id": 24,
+            "materi": "Empat dimensi pengukuran TKP",
+            "kesulitan": "Sulit",
+            "kunci": "B",
+            "q": "Manakah skenario perilaku di bawah ini yang paling kuat mencerminkan dimensi Prososial?",
+            "opts": [
+                {"t": "Berani menegur rekan kerja yang melanggar prosedur di hadapan pimpinan.", "k": "A"},
+                {"t": "Secara sukarela membantu warga lanjut usia mengurus dokumen pelayanan di tengah antrean padat.", "k": "B"},
+                {"t": "Tetap tenang dan sabar ketika dikritik keras oleh atasan karena kesalahan laporan.", "k": "C"},
+                {"t": "Cepat beradaptasi dengan sistem aplikasi pelaporan digital yang baru diluncurkan.", "k": "D"},
+                {"t": "Mengambil alih kepemimpinan kelompok secara mandiri saat situasi darurat.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "B",
+                "penjelasan": "Membantu warga lanjut usia secara sukarela adalah wujud nyata empati, kepedulian, dan orientasi sosial (Dimensi Prososial).",
+                "konsep": "Penerapan indikator Prososial dalam tindakan nyata.",
+                "salah": "Pilihan A mencerminkan pengendalian/integritas, C mencerminkan pengendalian diri, D penyesuaian diri, dan E kepercayaan diri.",
+                "kesimpulan": "Dimensi Prososial berwujud tindakan kepedulian dan pertolongan bagi sesama."
+            }
+        },
+        {
+            "id": 25,
+            "materi": "Empat dimensi pengukuran TKP",
+            "kesulitan": "Sulit",
+            "kunci": "C",
+            "q": "Mengapa pengujian dalam TKP tidak hanya mengukur satu dimensi saja secara kaku pada setiap soalnya?",
+            "opts": [
+                {"t": "Karena pembuat soal sering kebingungan menentukan kategori dimensi.", "k": "A"},
+                {"t": "Karena setiap tindakan manusia dalam dunia nyata melibatkan seluruh aspek kehidupan pribadi secara acak.", "k": "B"},
+                {"t": "Karena perilaku manusia bersifat kompleks dan satu tindakan integritas sering kali mencerminkan irisan dari beberapa dimensi sekaligus (misal: pengendalian diri dan prososial).", "k": "C"},
+                {"t": "Karena aturan seleksi melarang pengelompokan soal berdasarkan dimensi.", "k": "D"},
+                {"t": "Karena dimensi pengukuran hanya bersifat formalitas administratif semata.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "C",
+                "penjelasan": "Perilaku manusia bersifat multidimensional; suatu tindakan terpuji sering kali memuat unsur prososial, pengendalian diri, maupun penyesuaian diri secara bersamaan.",
+                "konsep": "Sifat multidimensional perilaku manusia dalam tes psikologi.",
+                "salah": "Pilihan A, B, D, and E mengabaikan kedalaman teori psikometri.",
+                "kesimpulan": "Kompleksitas perilaku diuji melalui irisan dimensi yang saling menguatkan."
+            }
+        },
+        {
+            "id": 26,
+            "materi": "Empat dimensi pengukuran TKP",
+            "kesulitan": "Sulit",
+            "kunci": "D",
+            "q": "Bagaimana cara mengenali bahwa sebuah butir soal menguji dimensi Penyesuaian Diri?",
+            "opts": [
+                {"t": "Jika soal tersebut membahas tentang cara membagikan sumbangan kepada fakir miskin.", "k": "A"},
+                {"t": "Jika soal tersebut menuntut keberanian tampil sebagai pemimpin upacara.", "k": "B"},
+                {"t": "Jika soal tersebut menguji ketahanan menahan amarah saat dicaci maki.", "k": "C"},
+                {"t": "Jika soal tersebut menyangkut situasi perubahan lingkungan, penyesuaian SOP baru, atau kolaborasi dalam perbedaan.", "k": "D"},
+                {"t": "Jika soal tersebut mengharuskan penyetoran laporan keuangan secara jujur.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "D",
+                "penjelasan": "Soal penyesuaian diri selalu berpusat pada dinamika perubahan, fleksibilitas kerja, dan kemampuan beradaptasi dengan lingkungan atau aturan baru.",
+                "konsep": "Kunci identifikasi konteks soal Penyesuaian Diri.",
+                "salah": "Pilihan A (prososial), B (kepercayaan diri), C (pengendalian diri), E (integritas/pengendalian diri).",
+                "kesimpulan": "Kunci mengenali dimensi Penyesuaian Diri adalah adanya unsur perubahan, adaptasi, dan fleksibilitas."
+            }
+        },
+
+        // --- KELOMPOK D: Hubungan tujuh karakter dengan empat dimensi (5 Soal: 27-31) ---
+        {
+            "id": 27,
+            "materi": "Hubungan tujuh karakter dengan empat dimensi",
+            "kesulitan": "Sedang",
+            "kunci": "E",
+            "q": "Bagaimana kriteria karakter 'disiplin' berkaitan dengan dimensi pengukuran dalam TKP?",
+            "opts": [
+                {"t": "Disiplin hanya berhubungan secara mutlak dengan dimensi kepercayaan diri semata.", "k": "A"},
+                {"t": "Disiplin tidak memiliki kaitan apa pun dengan keempat dimensi pengukuran.", "k": "B"},
+                {"t": "Disiplin hanya diukur melalui dimensi prososial dalam kerja kelompok.", "k": "C"},
+                {"t": "Disiplin bertentangan dengan prinsip penyesuaian diri organisasi.", "k": "D"},
+                {"t": "Disiplin berkaitan erat dengan dimensi pengendalian diri (kepatuhan aturan) dan penyesuaian diri terhadap sistem kerja.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "E",
+                "penjelasan": "Satu karakter pokok seperti disiplin dapat berhubungan dengan lebih dari satu dimensi, yakni pengendalian diri (kepatuhan) dan penyesuaian diri.",
+                "konsep": "Hubungan fluktuatif antarkarakter dan dimensi (multidimensionalitas).",
+                "salah": "Pilihan A, B, C, and D membatasi atau menolak hubungan karakter dengan dimensi secara keliru.",
+                "kesimpulan": "Karakter pokok abdi negara berhubungan dengan multi-dimensi secara fleksibel."
+            }
+        },
+        {
+            "id": 28,
+            "materi": "Hubungan tujuh karakter dengan empat dimensi",
+            "kesulitan": "Sedang",
+            "kunci": "A",
+            "q": "Mengapa materi pembelajaran menegaskan bahwa satu kriteria karakter dapat berhubungan dengan lebih dari satu dimensi pengukuran?",
+            "opts": [
+                {"t": "Karena dalam kenyataan psikologis, perilaku manusia bersifat kompleks dan mencerminkan berbagai aspek mental secara simultan.", "k": "A"},
+                {"t": "Karena sistem penilaian TKP sering berubah-ubah setiap tahun.", "k": "B"},
+                {"t": "Karena jumlah dimensi sengaja dibuat lebih sedikit daripada jumlah kriteria karakter.", "k": "C"},
+                {"t": "Karena hal tersebut hanya merupakan asumsi teoritis tanpa arti praktis.", "k": "D"},
+                {"t": "Karena agar peserta lebih mudah menghafal jawaban soal ujian.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "A",
+                "penjelasan": "Karakter jujur atau disiplin tidak berdiri sendiri; sifatnya memengaruhi dimensi pengendalian diri sekaligus prososial dan penyesuaian diri.",
+                "konsep": "Keterkaitan holistik antara karakter dan dimensi psikologis.",
+                "salah": "Pilihan B, C, D, and E mengabaikan hakikat ilmu psikologi perilaku.",
+                "kesimpulan": "Karakter dan dimensi saling beririsan erat dalam membentuk profil kompetensi kepribadian."
+            }
+        },
+        {
+            "id": 29,
+            "materi": "Hubungan tujuh karakter dengan empat dimensi",
+            "kesulitan": "Sulit",
+            "kunci": "B",
+            "q": "Bagaimana hubungan antara kriteria karakter 'jiwa sosial yang tinggi' dengan dimensi Prososial?",
+            "opts": [
+                {"t": "Jiwa sosial merupakan lawan kata dari dimensi prososial dalam teori psikologi.", "k": "A"},
+                {"t": "Jiwa sosial adalah fondasi karakter yang diwujudkan secara langsung melalui indikator-indikator dalam dimensi prososial.", "k": "B"},
+                {"t": "Jiwa sosial hanya berhubungan dengan dimensi kepercayaan diri pengambilan keputusan.", "k": "C"},
+                {"t": "Jiwa sosial tidak ada kaitannya dengan dimensi prososial sama sekali.", "k": "D"},
+                {"t": "Jiwa sosial membatasi kemampuan seseorang dalam beradaptasi dengan organisasi.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "B",
+                "penjelasan": "Karakter jiwa sosial yang tinggi merupakan manifestasi moral yang diukur melalui dimensi prososial (empati, kerja sama, kepedulian).",
+                "konsep": "Kesesuaian langsung antara karakter dan dimensi.",
+                "salah": "Pilihan A, C, D, dan E keliru secara konseptual.",
+                "kesimpulan": "Karakter jiwa sosial terhubung secara linear dengan dimensi prososial."
+            }
+        },
+        {
+            "id": 30,
+            "materi": "Hubungan tujuh karakter dengan empat dimensi",
+            "kesulitan": "Sulit",
+            "kunci": "C",
+            "q": "Manakah pernyataan yang paling tepat mengenai hubungan kriteria 'percaya diri' dengan dimensi pengukuran TKP?",
+            "opts": [
+                {"t": "Percaya diri hanya berkaitan dengan dimensi pengendalian diri dalam menahan emosi.", "k": "A"},
+                {"t": "Percaya diri bertentangan dengan dimensi prososial karena bersifat mementingkan diri sendiri.", "k": "B"},
+                {"t": "Percaya diri berhubungan erat dengan dimensi kepercayaan diri itu sendiri, serta mendukung dimensi penyesuaian diri dalam menghadapi situasi baru.", "k": "C"},
+                {"t": "Percaya diri tidak memiliki hubungan dengan dimensi manapun dalam TKP.", "k": "D"},
+                {"t": "Percaya diri hanya diukur melalui kepatuhan terhadap perintah atasan.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "C",
+                "penjelasan": "Karakter percaya diri memperkuat dimensi kepercayaan diri (inisiatif, keputusan) sekaligus membantu keluwesan penyesuaian diri di lingkungan baru.",
+                "konsep": "Dampak luas karakter percaya diri terhadap dimensi adaptasi dan kemandirian.",
+                "salah": "Pilihan A, B, D, dan E salah menafsirkan keterkaitan teori.",
+                "kesimpulan": "Kepercayaan diri menopang keberanian bertindak sekaligus keluwesan adaptasi."
+            }
+        },
+        {
+            "id": 31,
+            "materi": "Hubungan tujuh karakter dengan empat dimensi",
+            "kesulitan": "Sulit",
+            "kunci": "D",
+            "q": "Bagaimana kaitan antara kriteria 'patuh pada aturan' dengan dimensi Pengendalian Diri dan Penyesuaian Diri?",
+            "opts": [
+                {"t": "Kepatuhan aturan hanya menuntut kaku pada masa lalu tanpa memedulikan penyesuaian diri.", "k": "A"},
+                {"t": "Kepatuhan aturan menghilangkan kebutuhan akan pengendalian diri individu.", "k": "B"},
+                {"t": "Kepatuhan aturan bertentangan dengan prinsip fleksibilitas penyesuaian diri.", "k": "C"},
+                {"t": "Kepatuhan aturan membutuhkan pengendalian diri untuk menahan pelanggaran impulsif, sekaligus menuntut penyesuaian diri saat aturan diperbarui.", "k": "D"},
+                {"t": "Kepatuhan aturan hanya berhubungan dengan dimensi prososial semata.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "D",
+                "penjelasan": "Patuh pada aturan melibatkan pengendalian diri (menjaga integritas dan menahan diri dari penyimpangan) serta penyesuaian diri (mengikuti pembaruan regulasi instansi).",
+                "konsep": "Sifat multidimensional kepatuhan aturan.",
+                "salah": "Pilihan A, B, C, dan E mengabaikan hubungan fungsional antarkarakter dan dimensi.",
+                "kesimpulan": "Patuh aturan adalah wujud sinkronisasi antara pengendalian diri dan penyesuaian diri."
+            }
+        },
+
+        // --- KELOMPOK E: Sistem penilaian skor 1–5 (8 Soal: 32-39) ---
+        {
+            "id": 32,
+            "materi": "Sistem penilaian skor 1–5",
+            "kesulitan": "Mudah",
+            "kunci": "A",
+            "q": "Dalam latihan TKP PRC, setiap soal mempunyai lima pilihan respons dengan rentang skor berapa?",
+            "opts": [
+                {"t": "1 sampai 5", "k": "A"},
+                {"t": "0 sampai 100", "k": "B"},
+                {"t": "10 sampai 50", "k": "C"},
+                {"t": "Persetujuan Sangat Setuju hingga Sangat Tidak Setuju mutlak", "k": "D"},
+                {"t": "Benar (1) dan Salah (0) saja", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "A",
+                "penjelasan": "Sistem penilaian simulasi latihan TKP PRC menggunakan rentang skor 1 hingga 5 pada setiap butir soal situasional.",
+                "konsep": "Rentang penskoran latihan TKP PRC (1-5).",
+                "salah": "Pilihan B, C, D, dan E salah karena tidak sesuai dengan sistem rentang 1-5 latihan TKP.",
+                "kesimpulan": "Rentang skor latihan TKP menggunakan skala bertingkat 1 sampai 5."
+            }
+        },
+        {
+            "id": 33,
+            "materi": "Sistem penilaian skor 1–5",
+            "kesulitan": "Mudah",
+            "kunci": "B",
+            "q": "Dalam latihan TKP PRC, pilihan jawaban yang memperoleh skor 5 pada prinsipnya merupakan respons yang seperti apa?",
+            "opts": [
+                {"t": "Paling menguntungkan kepentingan pribadi peserta ujian.", "k": "A"},
+                {"t": "Paling sesuai dengan tugas, tanggung jawab, integritas, aturan, dan karakter yang diharapkan dari seorang abdi negara.", "k": "B"},
+                {"t": "Paling cepat diselesaikan tanpa memperdulikan prosedur yang berlaku.", "k": "C"},
+                {"t": "Paling disukai oleh rekan-rekan kerja yang ingin bersantai.", "k": "D"},
+                {"t": "Paling menggunakan kalimat terpanjang di antara semua pilihan.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "B",
+                "penjelasan": "Skor 5 diberikan pada respons yang paling tepat, solutif, berintegritas tinggi, dan selaras dengan standar abdi negara.",
+                "konsep": "Kriteria respons peraih skor 5.",
+                "salah": "Pilihan A, C, D, and E mencerminkan tindakan egois, melanggar prosedur, atau mitos keliru.",
+                "kesimpulan": "Skor tertinggi (5) mencerminkan ketepatan sikap profesional dan integritas tertinggi."
+            }
+        },
+        {
+            "id": 34,
+            "materi": "Sistem penilaian skor 1–5",
+            "kesulitan": "Sedang",
+            "kunci": "C",
+            "q": "Apa makna dari pilihan respons yang mendapatkan skor 1 dalam simulasi latihan TKP?",
+            "opts": [
+                {"t": "Respons yang sangat sempurna dan ideal untuk dilakukan.", "k": "A"},
+                {"t": "Respons yang cukup baik namun membutuhkan waktu lama.", "k": "B"},
+                {"t": "Respons yang paling buruk, bertentangan dengan integritas, merugikan organisasi, atau mencerminkan pengabaian tugas.", "k": "C"},
+                {"t": "Respons netral yang tidak memiliki dampak apa pun.", "k": "D"},
+                {"t": "Respons cadangan jika pilihan lain habis.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "C",
+                "penjelasan": "Skor 1 diberikan pada pilihan yang paling tidak tepat, mencerminkan pelanggaran etika, sikap masa bodoh, atau merugikan institusi.",
+                "konsep": "Makna skor terendah (1) dalam TKP.",
+                "salah": "Pilihan A, B, D, dan E bertentangan dengan arti skor 1.",
+                "kesimpulan": "Skor 1 adalah representasi respons terburuk yang melanggar nilai kepribadian abdi negara."
+            }
+        },
+        {
+            "id": 35,
+            "materi": "Sistem penilaian skor 1–5",
+            "kesulitan": "Sedang",
+            "kunci": "C",
+            "q": "Mengapa kelima pilihan jawaban dalam soal latihan TKP memiliki nilai skor yang berbeda-beda (mulai dari 1 hingga 5)?",
+            "opts": [
+                {"t": "Karena pembuat soal ingin mengecoh peserta secara acak.", "k": "A"},
+                {"t": "Karena tidak ada jawaban yang benar atau salah sama sekali dalam tes kepribadian.", "k": "B"},
+                {"t": "Karena setiap tindakan memiliki gradasi kualitas, efektivitas, dan tingkat keselarasan etika yang berbeda-beda terhadap situasi yang dihadapi.", "k": "C"},
+                {"t": "Karena aturan psikotes mewajibkan variasi skor agar komputer mudah menghitung.", "k": "D"},
+                {"t": "Karena nilai 1 dan 5 hanya hiasan statistik semata.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "C",
+                "penjelasan": "Gradasi skor 1–5 menunjukkan spektrum ketepatan tindakan; dari yang sangat buruk (1) hingga yang paling solutif dan berintegritas (5).",
+                "konsep": "Gradasi kualitas respons dalam pilihan ganda bertingkat.",
+                "salah": "Pilihan A, B, D, dan E mengabaikan tujuan ukur psikometri.",
+                "kesimpulan": "Gradasi skor mencerminkan tingkat ketepatan penyelesaian masalah secara profesional."
+            }
+        },
+        {
+            "id": 36,
+            "materi": "Sistem penilaian skor 1–5",
+            "kesulitan": "Sedang",
+            "kunci": "E",
+            "q": "Mengapa jawaban terbaik (skor 5) dalam tes kepribadian tidak selalu ditentukan oleh kalimat yang paling panjang atau paling formal?",
+            "opts": [
+                {"t": "Karena kalimat panjang selalu merupakan jebakan pembuat soal.", "k": "A"},
+                {"t": "Karena penguji lebih menyukai jawaban yang sangat singkat.", "k": "B"},
+                {"t": "Karena panjang pendeknya kalimat tidak ada hubungannya dengan logika.", "k": "C"},
+                {"t": "Karena sistem komputer membaca jawaban secara acak.", "k": "D"},
+                {"t": "Karena kualitas jawaban dinilai dari substansi ketepatan tindakan, kelayakan etika, dan solusi masalahnya, bukan dari gaya bahasa atau panjang kalimat.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "E",
+                "penjelasan": "Penilaian TKP menilai substansi ketepatan perilaku dan solusi, bukan sekadar polesan kata-kata yang panjang atau formal.",
+                "konsep": "Substansi perilaku di atas estetika kalimat.",
+                "salah": "Pilihan A, B, C, and D adalah mitos keliru dalam mengerjakan psikotes.",
+                "kesimpulan": "Substansi ketepatan tindakan adalah penentu utama skor 5, bukan panjang kalimat."
+            }
+        },
+        {
+            "id": 37,
+            "materi": "Sistem penilaian skor 1–5",
+            "kesulitan": "Sulit",
+            "kunci": "A",
+            "q": "Apa makna dari skor 3 dalam gradasi penilaian latihan TKP?",
+            "opts": [
+                {"t": "Respons yang bersifat cukup atau moderat, tidak terlalu buruk namun juga tidak memberikan solusi yang optimal.", "k": "A"},
+                {"t": "Respons yang pasti menjamin kelulusan peserta ujian.", "k": "B"},
+                {"t": "Respons yang sama nilainya dengan skor 5.", "k": "C"},
+                {"t": "Respons pelanggaran berat yang harus diberi sanksi disiplin.", "k": "D"},
+                {"t": "Respons yang paling dihindari karena bernilai negatif.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "A",
+                "penjelasan": "Skor 3 berada di tengah (moderat), menunjukkan tindakan yang lumayan namun kurang proaktif atau kurang tuntas menyelesaikan masalah.",
+                "konsep": "Makna skor tengah (3) dalam skala 1-5.",
+                "salah": "Pilihan B, C, D, dan E keliru.",
+                "kesimpulan": "Skor 3 mencerminkan respons menengah yang bersifat pasif atau kurang optimal."
+            }
+        },
+        {
+            "id": 38,
+            "materi": "Sistem penilaian skor 1–5",
+            "kesulitan": "Sulit",
+            "kunci": "B",
+            "q": "Mengapa peserta ujian perlu memahami bahwa skor tertinggi (skor 5) menuntut konteks tanggung jawab dan aturan, bukan sekadar niat baik semata?",
+            "opts": [
+                {"t": "Karena niat baik saja sudah cukup untuk mendapatkan nilai sempurna di semua instansi.", "k": "A"},
+                {"t": "Karena niat baik tanpa berlandaskan aturan dan tanggung jawab prosedural dapat berakibat pada pelanggaran hukum atau mal-administrasi.", "k": "B"},
+                {"t": "Karena aturan institusi melarang adanya niat baik dalam bertugas.", "k": "C"},
+                {"t": "Karena tanggung jawab pribadi lebih rendah kedudukannya daripada niat baik.", "k": "D"},
+                {"t": "Karena penilai hanya melihat niat awal peserta tanpa melihat tindakan akhir.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "B",
+                "penjelasan": "Niat menolong yang tidak sesuai prosedur atau melanggar aturan dapat menimbulkan kekacauan operasional; oleh karena itu skor 5 mensyaratkan keselarasan niat, tanggung jawab, dan aturan.",
+                "konsep": "Sinergi niat baik dan kepatuhan prosedur.",
+                "salah": "Pilihan A, C, D, and E tidak logis.",
+                "kesimpulan": "Tindakan profesional memadukan niat baik dengan kepatuhan prosedur yang ketat."
+            }
+        },
+        {
+            "id": 39,
+            "materi": "Sistem penilaian skor 1–5",
+            "kesulitan": "Sulit",
+            "kunci": "C",
+            "q": "Apakah sistem penilaian skor 1–5 pada latihan TKP PRC dapat diklaim sebagai standar resmi yang mutlak digunakan oleh institusi POLRI?",
+            "opts": [
+                {"t": "Ya, karena sistem ini merupakan satu-satunya standar baku resmi kepolisian.", "k": "A"},
+                {"t": "Ya, dan disahkan langsung oleh Mabes Polri sebagai acuan nasional.", "k": "B"},
+                {"t": "Tidak, sistem ini merupakan instrumen latihan internal Persona Research & Consulting (PRC) untuk pembinaan materi, bukan standar resmi institusi POLRI.", "k": "C"},
+                {"t": "Tidak peduli, karena kedua sistem memiliki rumus perhitungan yang sama persis.", "k": "D"},
+                {"t": "Ya, khusus untuk seleksi perwira tinggi kepolisian.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "C",
+                "penjelasan": "Sistem skor latihan PRC adalah instrumen pelatihan internal untuk mengasah nalar peserta, bukan klaim standar resmi mutlak institusi POLRI.",
+                "konsep": "Status instrumen latihan PRC.",
+                "salah": "Pilihan A, B, D, and E merupakan klaim keliru yang menyalahi ketentuan.",
+                "kesimpulan": "Instrumen latihan PRC berfungsi sebagai sarana pembinaan dan latihan konseptual."
+            }
+        },
+
+        // --- KELOMPOK F: Skala persetujuan dan arah pernyataan (6 Soal: 40-45) ---
+        {
+            "id": 40,
+            "materi": "Skala persetujuan dan arah pernyataan",
+            "kesulitan": "Mudah",
+            "kunci": "D",
+            "q": "Dalam mengerjakan tes kepribadian yang menggunakan skala persetujuan (Sangat Setuju hingga Sangat Tidak Setuju), prinsip apa yang paling tepat?",
+            "opts": [
+                {"t": "Selalu memilih 'Sangat Setuju' pada setiap nomor agar memperoleh nilai paling tinggi.", "k": "A"},
+                {"t": "Selalu memilih 'Tidak Setuju' untuk menghindari jawaban ekstrem.", "k": "B"},
+                {"t": "Memilih jawaban secara acak tanpa membaca pernyataan agar waktu cepat selesai.", "k": "C"},
+                {"t": "Memahami isi, konteks, dan arah pernyataan secara cermat terlebih dahulu sebelum menentukan tingkat persetujuan.", "k": "D"},
+                {"t": "Menggunakan satu pilihan jawaban yang sama untuk seluruh nomor soal.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "D",
+                "penjelasan": "Skala persetujuan menuntut pembacaan cermat terhadap arah pernyataan (positif atau negatif) sebelum menentukan sikap.",
+                "konsep": "Prinsip dasar pengerjaan tes skala persetujuan.",
+                "salah": "Pilihan A, B, C, and E adalah strategi keliru yang mendistorsi profil psikologis.",
+                "kesimpulan": "Pahami arah pernyataan dengan teliti sebelum menentukan tingkat persetujuan."
+            }
+        },
+        {
+            "id": 41,
+            "materi": "Skala persetujuan dan arah pernyataan",
+            "kesulitan": "Sedang",
+            "kunci": "E",
+            "q": "Apakah pilihan 'Sangat Setuju' selalu dan secara otomatis mendapatkan skor tertinggi dalam setiap item tes skala persetujuan?",
+            "opts": [
+                {"t": "Ya, karena 'Sangat Setuju' adalah cerminan semangat positif peserta.", "k": "A"},
+                {"t": "Ya, pada semua jenis tes psikologi modern.", "k": "B"},
+                {"t": "Tidak pernah, karena pilihan tersebut selalu bernilai paling rendah.", "k": "C"},
+                {"t": "Tergantung pada selera penguji yang memeriksa lembar jawaban.", "k": "D"},
+                {"t": "Tidak, karena makna persetujuan sangat bergantung pada isi pernyataan (apakah pernyataan tersebut bermuatan positif atau negatif).", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "E",
+                "penjelasan": "Jika pernyataan bernilai negatif (misal: 'Saya kadang terpaksa berbohong demi kebaikan'), maka persetujuan justru bernilai buruk. Skor tertinggi bergantung pada arah pernyataan.",
+                "konsep": "Ketergantungan skor pada arah pernyataan (positif/negatif).",
+                "salah": "Pilihan A, B, C, and D keliru secara psikometri.",
+                "kesimpulan": "'Sangat Setuju' tidak selalu bernilai tinggi; hal itu bergantung pada apakah pernyataannya positif atau negatif."
+            }
+        },
+        {
+            "id": 42,
+            "materi": "Skala persetujuan dan arah pernyataan",
+            "kesulitan": "Sedang",
+            "kunci": "A",
+            "q": "Mengapa peserta ujian tidak boleh menjawab seluruh pernyataan dalam tes skala persetujuan dengan pola yang sama (misal: menjawab 'Setuju' semua)?",
+            "opts": [
+                {"t": "Karena hal tersebut menunjukkan inkonsistensi logika, tidak membaca soal, dan kegagalan memahami arah pernyataan positif serta negatif.", "k": "A"},
+                {"t": "Karena sistem komputer akan memberikan bonus nilai jika pola dijawab sama.", "k": "B"},
+                {"t": "Karena aturan tes membolehkan pengisian pola seragam asalkan cepat selesai.", "k": "C"},
+                {"t": "Karena jawaban seragam adalah syarat mutlak kelulusan psikotes.", "k": "D"},
+                {"t": "Karena penguji menyukai peserta yang tidak memiliki pendirian.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "A",
+                "penjelasan": "Pola jawaban seragam membuktikan bahwa peserta tidak membaca isi soal, yang berakibat pada gagalnya pengukuran konsistensi psikologis.",
+                "konsep": "Bahaya pola jawaban seragam (response set).",
+                "salah": "Pilihan B, C, D, and E menyalahi aturan validitas psikotes.",
+                "kesimpulan": "Pola jawaban seragam mencerminkan kelalaian dan menurunkan validitas tes."
+            }
+        },
+        {
+            "id": 43,
+            "materi": "Skala persetujuan dan arah pernyataan",
+            "kesulitan": "Sedang",
+            "kunci": "B",
+            "q": "Apa risiko utama jika peserta berasumsi bahwa semua pernyataan dalam tes kepribadian bernilai positif sehingga langsung memilih 'Sangat Setuju'?",
+            "opts": [
+                {"t": "Peserta akan lulus dengan predikat nilai tertinggi.", "k": "A"},
+                {"t": "Peserta akan terjebak pada pernyataan negatif yang dibalik, sehingga memberikan jawaban yang justru merusak profil integritasnya sendiri.", "k": "B"},
+                {"t": "Peserta akan menghemat waktu pengerjaan secara maksimal.", "k": "C"},
+                {"t": "Peserta dianggap sangat ramah oleh tim penguji psikologi.", "k": "D"},
+                {"t": "Tidak ada risiko apa pun karena asumsi tersebut selalu benar.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "B",
+                "penjelasan": "Banyak tes psikologi menyisipkan pernyataan negatif (aitem jebakan). Jika peserta asal setuju, profil integritasnya akan jatuh.",
+                "konsep": "Risiko asumsi buta pada pernyataan tes.",
+                "salah": "Pilihan A, C, D, and E salah secara substansial.",
+                "kesimpulan": "Asumsi buta pada pernyataan positif berisiko menjebak peserta pada jawaban yang merugikan."
+            }
+        },
+        {
+            "id": 44,
+            "materi": "Skala persetujuan dan arah pernyataan",
+            "kesulitan": "Sulit",
+            "kunci": "C",
+            "q": "Bagaimana cara yang paling tepat dalam memahami dan menyikapi pernyataan negatif dalam tes skala kepribadian?",
+            "opts": [
+                {"t": "Langsung memilih 'Sangat Tidak Setuju' tanpa membaca kalimatnya.", "k": "A"},
+                {"t": "Memilih 'Sangat Setuju' agar terlihat jujur mengakui kelemahan.", "k": "B"},
+                {"t": "Membaca secara cermat, memahami maksud kalimat penolakan tersebut, dan memberikan respons persetujuan yang konsisten dengan standar moral abdi negara.", "k": "C"},
+                {"t": "Mengabaikan pernyataan negatif dan menganggapnya sebagai kesalahan ketik lembar soal.", "k": "D"},
+                {"t": "Memilih pilihan netral pada semua pernyataan negatif.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "C",
+                "penjelasan": "Pernyataan negatif harus dibaca cermat agar peserta tahu kapan harus menolak (tidak setuju) terhadap pernyataan buruk tersebut.",
+                "konsep": "Strategi menyikapi pernyataan negatif dalam psikotes.",
+                "salah": "Pilihan A, B, D, and E mengabaikan ketelitian membaca.",
+                "kesimpulan": "Pernyataan negatif menuntut ketelitian membaca agar respons yang diberikan tetap mencerminkan integritas tinggi."
+            }
+        },
+        {
+            "id": 45,
+            "materi": "Skala persetujuan dan arah pernyataan",
+            "kesulitan": "Sulit",
+            "kunci": "D",
+            "q": "Mengapa pembacaan secara menyeluruh dan teliti sangat diwajibkan sebelum peserta menentukan tingkat persetujuan pada tiap nomor soal?",
+            "opts": [
+                {"t": "Agar peserta dapat menghafal seluruh soal untuk ujian berikutnya.", "k": "A"},
+                {"t": "Agar peserta bisa menyelesaikan ujian dalam waktu kurang dari lima menit.", "k": "B"},
+                {"t": "Karena penguji mengawasi setiap gerakan mata peserta ujian.", "k": "C"},
+                {"t": "Karena kalimat pengecoh atau frasa penentu (seperti kata 'kecuali' atau 'tidak') sering kali mengubah total arah dan makna pernyataan.", "k": "D"},
+                {"t": "Karena sistem penilaian memberikan nilai bonus untuk kecepatan baca.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "D",
+                "penjelasan": "Kata-kata kecil seperti 'kecuali', 'tidak', atau 'selalu' mengubah arah pernyataan secara drastis, sehingga pembacaan teliti mutlak diperlukan.",
+                "konsep": "Pentingnya ketelitian membaca frasa kunci dalam soal.",
+                "salah": "Pilihan A, B, C, and E tidak relevan dengan tujuan ukur.",
+                "kesimpulan": "Ketelitian membaca menyeluruh mencegah salah tangkap arti yang berakibat pada kesalahan pemilihan jawaban."
+            }
+        },
+
+        // --- KELOMPOK G: Strategi menghadapi TKP (5 Soal: 46-50) ---
+        {
+            "id": 46,
+            "materi": "Strategi menghadapi TKP",
+            "kesulitan": "Mudah",
+            "kunci": "C",
+            "q": "Manakah di bawah ini yang merupakan strategi paling mendasar dalam menghadapi tes kepribadian?",
+            "opts": [
+                {"t": "Menghafalkan seluruh kunci jawaban latihan yang beredar di internet.", "k": "A"},
+                {"t": "Memilih jawaban yang paling ekstrem agar terlihat paling berani di mata penguji.", "k": "B"},
+                {"t": "Membaca pernyataan secara cermat, memahami dimensi perilaku yang diukur, serta memilih respons yang paling berintegritas dan solutif.", "k": "C"},
+                {"t": "Mengosongkan semua soal yang memiliki kalimat terlalu panjang.", "k": "D"},
+                {"t": "Menggunakan pola tebakan acak pada seluruh nomor ujian.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "C",
+                "penjelasan": "Strategi terbaik adalah membaca cermat, memahami dimensi yang diuji, dan memilih respons paling berintegritas.",
+                "konsep": "Strategi dasar pengerjaan TKP.",
+                "salah": "Pilihan A, B, D, and E adalah strategi keliru.",
+                "kesimpulan": "Strategi utama TKP adalah memahami konteks perilaku dan memilih respons berintegritas."
+            }
+        },
+        {
+            "id": 47,
+            "materi": "Strategi menghadapi TKP",
+            "kesulitan": "Sedang",
+            "kunci": "D",
+            "q": "Mengapa peserta ujian disarankan untuk tidak terjebak pada pilihan jawaban yang hanya terdengar sangat ideal di awang-awang tanpa dasar operasional yang jelas?",
+            "opts": [
+                {"t": "Karena pilihan ideal selalu bernilai skor paling rendah.", "k": "A"},
+                {"t": "Karena penguji tidak menyukai jawaban yang muluk-muluk.", "k": "B"},
+                {"t": "Karena jawaban ideal pasti melanggar aturan instansi.", "k": "C"},
+                {"t": "Karena jawaban terbaik dalam TKP adalah respons yang realistis, dapat diterapkan di lapangan, taat prosedur, dan solutif.", "k": "D"},
+                {"t": "Karena jawaban ideal hanya boleh dipilih oleh perwira tinggi.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "D",
+                "penjelasan": "Jawaban TKP harus realistis dan dapat diterapkan secara operasional sesuai aturan, bukan sekadar janji muluk yang tidak masuk akal.",
+                "konsep": "Realisme dan kelayakan operasional dalam pilihan TKP.",
+                "salah": "Pilihan A, B, C, and E keliru.",
+                "kesimpulan": "Respons terbaik adalah respons yang realistis, solutif, dan taat prosedur."
+            }
+        },
+        {
+            "id": 48,
+            "materi": "Strategi menghadapi TKP",
+            "kesulitan": "Sedang",
+            "kunci": "A",
+            "q": "Bagaimana cara mengelola waktu pengerjaan ujian dengan baik ketika menghadapi soal tes kepribadian yang cukup banyak?",
+            "opts": [
+                {"t": "Menjaga fokus konsentrasi, tidak berlama-lama meragukan satu soal, serta memastikan seluruh nomor terjawab tanpa ada yang kosong.", "k": "A"},
+                {"t": "Mengerjakan 5 soal pertama dengan sangat lambat lalu meninggalkan sisanya.", "k": "B"},
+                {"t": "Tidur sebentar di tengah ujian jika merasa lelah membaca soal panjang.", "k": "C"},
+                {"t": "Mengisi lembar jawaban secara serampangan dalam waktu dua menit.", "k": "D"},
+                {"t": "Meminta pengawas menambah waktu ujian secara khusus.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "A",
+                "penjelasan": "Manajemen waktu yang baik menuntut fokus, ketenangan, dan memastikan tidak ada nomor soal yang terlewat kosong.",
+                "konsep": "Strategi manajemen waktu psikotes.",
+                "salah": "Pilihan B, C, D, and E merugikan peserta ujian.",
+                "kesimpulan": "Kelola waktu secara proporsional agar semua soal terisi dengan keputusan yang matang."
+            }
+        },
+        {
+            "id": 49,
+            "materi": "Strategi menghadapi TKP",
+            "kesulitan": "Sulit",
+            "kunci": "B",
+            "q": "Mengapa menjaga konsistensi jawaban antar-soal yang memiliki kemiripan konteks sangat penting dalam pengerjaan tes kepribadian?",
+            "opts": [
+                {"t": "Karena komputer penguji langsung mendiskualifikasi peserta yang ragu-ragu.", "k": "A"},
+                {"t": "Karena inkonsistensi menunjukkan bahwa profil kepribadian peserta tidak stabil atau direkayasa (palsu).", "k": "B"},
+                {"t": "Karena konsistensi adalah satu-satunya syarat ujian kesamaptaan.", "k": "C"},
+                {"t": "Karena soal yang mirip pasti memiliki kunci jawaban yang sama persis.", "k": "D"},
+                {"t": "Konsistensi tidak memiliki pengaruh apa pun terhadap nilai akhir.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "B",
+                "penjelasan": "Inkonsistensi dalam menjawab soal-soal bermiripan menandakan ketidakjujuran atau ketidakstabilan karakter yang terbaca oleh sistem validitas.",
+                "konsep": "Validitas konsistensi jawaban (skala kejujuran).",
+                "salah": "Pilihan A, C, D, and E keliru.",
+                "kesimpulan": "Konsistensi mencerminkan kemantapan dan keaslian karakter kepribadian peserta."
+            }
+        },
+        {
+            "id": 50,
+            "materi": "Strategi menghadapi TKP",
+            "kesulitan": "Sulit",
+            "kunci": "C",
+            "q": "Prinsip utama apa yang harus dipegang teguh oleh peserta dalam menghindari jebakan jawaban yang bertentangan dengan integritas?",
+            "opts": [
+                {"t": "Selalu memilih jawaban yang paling menguntungkan diri sendiri.", "k": "A"},
+                {"t": "Memilih jawaban yang disukai oleh mayoritas peserta lain.", "k": "B"},
+                {"t": "Memilih respons yang selalu menjunjung tinggi kejujuran, aturan hukum, kepentingan publik, dan menolak segala bentuk jalan pintas menyimpang.", "k": "C"},
+                {"t": "Mengikuti intuisi tebakan tanpa memikirkan kode etik profesi.", "k": "D"},
+                {"t": "Memilih jawaban yang paling cepat mengakhiri masalah tanpa prosedur.", "k": "E"}
+            ],
+            "pembahasan": {
+                "benar": "C",
+                "penjelasan": "Integritas menuntut penolakan terhadap jalan pintas dan komitmen mutlak pada aturan hukum serta kepentingan publik.",
+                "konsep": "Prinsip integritas mutlak dalam pilihan TKP.",
+                "salah": "Pilihan A, B, D, and E bertentangan dengan integritas abdi negara.",
+                "kesimpulan": "Pegang teguh integritas, aturan hukum, dan kepentingan publik dalam setiap pilihan respons."
+            }
+        }
+    ];
+
+    function generateSessionId() {
+        const now = new Date();
+        const pad = n => String(n).padStart(2, '0');
+        const ts = `${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+        const rnd = Math.floor(100 + Math.random() * 900);
+        return `PRC-TKPTEORI-${ts}-${rnd}`;
+    }
+
+    function formatDateID(d) {
+        const pad = n => String(n).padStart(2, '0');
+        return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`;
+    }
+
+    function formatTimeID(d) {
+        const pad = n => String(n).padStart(2, '0');
+        return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    }
+
+    function formatDurationID(ms) {
+        const totalSec = Math.max(1, Math.floor(ms / 1000));
+        const m = Math.floor(totalSec / 60);
+        const s = totalSec % 60;
+        return `${m} Menit ${s} Detik`;
+    }
+
+    // Fungsi Pengacakan Opsi Jawaban (A-E) untuk Memastikan Kunci Terdistribusi Adil
+    function shuffleOptionsBalanced(dataList) {
+        return dataList.map((item) => {
+            const clonedOpts = item.opts.map(o => ({ ...o }));
+            // Acak array opsi
+            for (let i = clonedOpts.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                const tmp = clonedOpts[i];
+                clonedOpts[i] = clonedOpts[j];
+                clonedOpts[j] = tmp;
+            }
+            // Cari tahu huruf mana yang sekarang memuat kunci asli (item.kunci)
+            let newCorrectLetter = "";
+            clonedOpts.forEach((o, idx) => {
+                if (o.k === item.kunci) {
+                    newCorrectLetter = String.fromCharCode(65 + idx);
+                }
+            });
+            return {
+                ...item,
+                opts: clonedOpts,
+                dynamicKunci: newCorrectLetter
+            };
+        });
+    }
+
+    function startExam() {
+        const inputEl = document.getElementById('pName');
+        const errEl = document.getElementById('login-err');
+        const nameVal = (inputEl ? inputEl.value : "").trim();
+
+        if (nameVal.length < 3) {
+            if (errEl) errEl.style.display = 'block';
+            if (inputEl) inputEl.focus();
+            return;
+        }
+        if (errEl) errEl.style.display = 'none';
+
+        pName = nameVal;
+        sessionId = generateSessionId();
+        startTimeObj = new Date();
+        questions = shuffleOptionsBalanced(rawData);
+        userSelections = {};
+        currentIdx = 0;
+
+        document.getElementById('peserta-badge').innerText = `Peserta: ${pName.toUpperCase()}`;
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('exam-container').style.display = 'flex';
+        render();
+    }
+
+    function render() {
+        const q = questions[currentIdx];
+        document.getElementById('q-text').innerText = `${currentIdx + 1}. ${q.q}`;
+        const optContainer = document.getElementById('options');
+        optContainer.innerHTML = "";
+
+        q.opts.forEach((o, i) => {
+            const sel = userSelections[currentIdx] && userSelections[currentIdx].optIndex === i ? 'selected' : '';
+            const letter = String.fromCharCode(65 + i);
+            const div = document.createElement('div');
+            div.className = `option ${sel}`.trim();
+            div.innerHTML = `<b style="margin-right:10px;">${letter}.</b> <span>${o.t}</span>`;
+            div.addEventListener('click', () => pick(i));
+            optContainer.appendChild(div);
+        });
+        updateNav();
+    }
+
+    function pick(optIndex) {
+        const q = questions[currentIdx];
+        const chosenOpt = q.opts[optIndex];
+        const chosenLetter = String.fromCharCode(65 + optIndex);
+        const isCorrect = (chosenLetter === q.dynamicKunci);
+
+        userSelections[currentIdx] = {
+            optIndex: optIndex,
+            letter: chosenLetter,
+            t: chosenOpt.t,
+            isCorrect: isCorrect,
+            score: isCorrect ? 1 : 0
+        };
+        render();
+
+        // Fitur Auto-Next
+        setTimeout(() => {
+            if (currentIdx < TOTAL_SOAL - 1) {
+                currentIdx++;
+                render();
+                window.scrollTo(0, 0);
+            }
+        }, 250);
+    }
+
+    function updateNav() {
+        const navGrid = document.getElementById('nav-grid');
+        navGrid.innerHTML = "";
+        let answeredCount = 0;
+        for (let i = 0; i < TOTAL_SOAL; i++) {
+            if (userSelections[i]) answeredCount++;
+            const cls = currentIdx === i ? 'current' : (userSelections[i] ? 'filled' : '');
+            const dot = document.createElement('div');
+            dot.className = `nav-dot ${cls}`.trim();
+            dot.innerText = String(i + 1);
+            dot.addEventListener('click', () => goTo(i));
+            navGrid.appendChild(dot);
+        }
+        document.getElementById('progress-badge').innerText = `Terjawab: ${answeredCount} / ${TOTAL_SOAL}`;
+    }
+
+    function goTo(i) { currentIdx = i; render(); }
+    function prevQ() { if (currentIdx > 0) { currentIdx--; render(); } }
+    function nextQ() { if (currentIdx < TOTAL_SOAL - 1) { currentIdx++; render(); } }
+
+    async function sendResultToMaster(payload) {
+        const statusEl = document.getElementById('sync-status');
+        statusEl.className = "sync-banner sync-loading";
+        statusEl.innerText = "Mengirim dan menyimpan hasil tes teori TKP ke database MASTER PRC...";
+
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const rawText = await response.text();
+            let parsed = null;
+            try { parsed = JSON.parse(rawText); } catch (e) { parsed = { raw: rawText }; }
+
+            if (parsed && (parsed.status === "error" || parsed.result === "error")) {
+                throw new Error(parsed.message || "Server mengembalikan status error");
+            }
+
+            isSubmitted = true;
+            statusEl.className = "sync-banner sync-ok";
+            statusEl.innerText = `Hasil berhasil tersimpan ke database MASTER PRC (Session ID: ${payload.sessionId}).`;
+        } catch (err) {
+            isSubmitting = false;
+            statusEl.className = "sync-banner sync-err";
+            statusEl.innerHTML = `Gagal mengirim hasil ke server (${err.message}). <button type="button" id="btn-retry-sync" style="margin-left:10px; padding:5px 12px; background:#c0392b; color:white; border:none; border-radius:4px; cursor:pointer; font-weight:bold;">Kirim Ulang</button>`;
+            const retryBtn = document.getElementById('btn-retry-sync');
+            if (retryBtn) retryBtn.addEventListener('click', () => sendResultToMaster(lastPayload));
+        }
+    }
+
+    function triggerFileDownload(blob, filename) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function downloadPembahasanHTML() {
+        if (!finalReportData) return;
+        const { payload, reviewHtml } = finalReportData;
+        const docHtml = `<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Pembahasan Tes Teori TKP Polri - ${payload.namaSiswa}</title>
+<style>
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #faf7f2; color: #1f2937; margin: 0; padding: 24px; line-height: 1.6; }
+    .wrap { max-width: 860px; margin: 0 auto; background: #ffffff; padding: 32px; border-radius: 10px; box-shadow: 0 2px 12px rgba(15,28,63,0.08); }
+    .hdr { background: #0f1c3f; color: #faf7f2; padding: 22px; border-radius: 8px; border-bottom: 4px solid #b85d79; margin-bottom: 22px; }
+    .hdr h1 { margin: 0 0 6px 0; font-size: 1.35rem; }
+    .hdr p { margin: 0; font-size: 0.9rem; color: #e2b8c6; }
+    .meta-table { width: 100%; border-collapse: collapse; margin-bottom: 22px; font-size: 0.92rem; }
+    .meta-table td { padding: 8px 12px; border: 1px solid #e5e7eb; }
+    .meta-table td.lbl { background: #f3f4f6; font-weight: 700; width: 28%; color: #0f1c3f; }
+    .review-card { background: #fff; padding: 20px; margin-bottom: 18px; border-radius: 8px; border: 1px solid #e5e7eb; border-left: 6px solid #b85d79; }
+    .badge-topic { display: inline-block; background: #0f1c3f; color: #faf7f2; padding: 4px 10px; border-radius: 4px; font-size: 0.78rem; font-weight: 700; margin-bottom: 10px; }
+    .review-opt { padding: 8px 12px; margin: 5px 0; border-radius: 6px; background: #f9fafb; border: 1px solid #e5e7eb; font-size: 0.92rem; }
+    .review-opt.user-picked { border: 2px solid #0f1c3f; background: #eef2ff; }
+    .review-opt.correct-opt { border-left: 4px solid #1e8449; background: #eafaf1; }
+    .pembahasan-box { margin-top: 12px; font-size: 0.92rem; background: #faf7f2; padding: 14px; border-radius: 6px; border: 1px solid #ece3e6; }
+    .pembahasan-box p { margin: 0 0 8px 0; }
+    .pembahasan-box p:last-child { margin-bottom: 0; }
+    @media print { body { background: #fff; padding: 0; } .wrap { box-shadow: none; padding: 10px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+    <div class="hdr">
+        <h1>PERSONA RESEARCH & CONSULTING — ARSIP PEMBAHASAN TES TEORI TKP</h1>
+        <p>Program Persiapan Seleksi POLRI (50 Butir Soal Teori & Konsep)</p>
+    </div>
+    <table class="meta-table">
+        <tr><td class="lbl">Nama Peserta</td><td>${payload.namaSiswa}</td><td class="lbl">Tanggal & Durasi</td><td>${payload.tanggal} (${payload.durasi})</td></tr>
+        <tr><td class="lbl">Session ID</td><td>${payload.sessionId}</td><td class="lbl">Jumlah Benar / Salah</td><td><b>${payload.jumlahBenar} Benar</b> / ${payload.jumlahSalah} Salah</td></tr>
+        <tr><td class="lbl">Nilai Akhir (Skala 100)</td><td><b>${payload.nilaiAkhir}</b></td><td class="lbl">Evaluasi PRC</td><td><b>${payload.kategoriEvaluasi}</b></td></tr>
+    </table>
+    ${reviewHtml}
+</div>
+</body>
+</html>`;
+
+        const safeName = payload.namaSiswa.replace(/[^a-zA-Z0-9_-]/g, "_");
+        const blob = new Blob([docHtml], { type: "text/html;charset=utf-8;" });
+        triggerFileDownload(blob, `Pembahasan_Teori_TKP_Polri_${safeName}.html`);
+    }
+
+    function finalize() {
+        if (isSubmitting || isSubmitted) return;
+
+        const answeredCount = Object.keys(userSelections).length;
+        if (answeredCount < TOTAL_SOAL) {
+            const belum = TOTAL_SOAL - answeredCount;
+            if (!confirm(`Masih ada ${belum} soal yang belum dijawab. Tetap selesaikan dan kirim jawaban sekarang?`)) {
+                return;
+            }
+        } else {
+            if (!confirm("Kirim hasil ujian teori TKP sekarang?")) return;
+        }
+
+        isSubmitting = true;
+        const finishBtn = document.getElementById('btn-finish');
+        if (finishBtn) {
+            finishBtn.disabled = true;
+            finishBtn.innerText = "MEMPROSES...";
+        }
+
+        const endTimeObj = new Date();
+        let jumlahBenar = 0;
+        let jumlahSalah = 0;
+        const jawabanList = [];
+        const skorPerSoal = [];
+        let h = "";
+
+        questions.forEach((q, i) => {
+            const picked = userSelections[i] || { letter: "-", t: "(Tidak dijawab)", isCorrect: false, score: 0 };
+            if (picked.isCorrect) {
+                jumlahBenar++;
+            } else {
+                jumlahSalah++;
+            }
+
+            jawabanList.push(`${i + 1}:${picked.letter}(${picked.score})`);
+            skorPerSoal.push(picked.score);
+
+            let bestOptText = "";
+            let optsHtml = "";
+            q.opts.forEach((o, idx) => {
+                const ltr = String.fromCharCode(65 + idx);
+                const isUser = picked.letter === ltr;
+                const isCorrectOpt = ltr === q.dynamicKunci;
+                if (isCorrectOpt) bestOptText = `${ltr}. ${o.t}`;
+
+                optsHtml += `<div class="review-opt ${isUser ? 'user-picked' : ''} ${isCorrectOpt ? 'correct-opt' : ''}">
+                    <b>${ltr}.</b> ${o.t} 
+                    ${isUser ? '<span style="color:#0f1c3f; font-weight:700;"> ← Pilihan Anda</span>' : ''}
+                    ${isCorrectOpt ? '<span style="color:#1e8449; font-weight:700;"> (Kunci Benar)</span>' : ''}
+                </div>`;
+            });
+
+            h += `<div class="review-card">
+                <div class="badge-topic">MATERI: ${q.materi.toUpperCase()} | KESULITAN: ${q.kesulitan.toUpperCase()}</div>
+                <div style="font-weight:700; color:var(--primary); font-size:1.05rem; margin-bottom:12px; line-height:1.55;">
+                    SOAL ${i + 1}. ${q.q}
+                </div>
+                ${optsHtml}
+                <div style="margin-top:10px; font-weight:700; color:${picked.isCorrect ? '#1e8449' : '#c0392b'};">
+                    Hasil Anda: ${picked.isCorrect ? 'BENAR (+1)' : 'SALAH (0)'} (Pilihan Anda: ${picked.letter})
+                </div>
+                <div class="pembahasan-box">
+                    <p><b>Kunci Jawaban Benar:</b> ${q.dynamicKunci}</p>
+                    <p><b>Penjelasan Teori:</b> ${q.pembahasan.penjelasan}</p>
+                    <p><b>Konsep Materi:</b> ${q.pembahasan.konsep}</p>
+                    <p><b>Analisis Pengecoh:</b> ${q.pembahasan.salah}</p>
+                    <p><b>Kesimpulan Pembelajaran:</b> ${q.pembahasan.kesimpulan}</p>
+                </div>
+            </div>`;
+        });
+
+        const nilaiAkhir = Number(((jumlahBenar / TOTAL_SOAL) * 100).toFixed(2));
+        let kategoriEvaluasi = "";
+        if (nilaiAkhir >= 90) kategoriEvaluasi = "Sangat baik";
+        else if (nilaiAkhir >= 80) kategoriEvaluasi = "Baik";
+        else if (nilaiAkhir >= 70) kategoriEvaluasi = "Cukup";
+        else if (nilaiAkhir >= 60) kategoriEvaluasi = "Perlu ditingkatkan";
+        else kategoriEvaluasi = "Perlu mempelajari kembali materi";
+
+        lastPayload = {
+            action: "saveTryout",
+            sessionId: sessionId,
+            namaSiswa: pName,
+            program: "POLRI",
+            namaTryout: "TES PENGUASAAN MATERI TKP SERI 1",
+            jenisTes: "TEORI_TKP",
+            tanggal: formatDateID(endTimeObj),
+            waktuMulai: formatTimeID(startTimeObj),
+            waktuSelesai: formatTimeID(endTimeObj),
+            durasi: formatDurationID(endTimeObj - startTimeObj),
+            jumlahSoal: TOTAL_SOAL,
+            jumlahBenar: jumlahBenar,
+            jumlahSalah: jumlahSalah,
+            nilaiAkhir: nilaiAkhir,
+            kategoriEvaluasi: kategoriEvaluasi,
+            jawabanDetail: jawabanList.join(", "),
+            skorPerSoal: skorPerSoal.join(",")
+        };
+
+        finalReportData = { payload: lastPayload, reviewHtml: h };
+
+        document.getElementById('exam-container').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'block';
+
+        document.getElementById('res-name').innerText = "PESERTA: " + pName.toUpperCase();
+        document.getElementById('score-area').innerHTML = `
+            <div class="score-box">JAWABAN BENAR<br><b style="font-size:1.5rem; color:#1e8449;">${jumlahBenar} / ${TOTAL_SOAL}</b></div>
+            <div class="score-box">NILAI AKHIR<br><b style="font-size:1.5rem; color:var(--primary);">${nilaiAkhir.toFixed(1)}</b></div>
+            <div class="score-box" style="background:var(--primary); color:var(--cream);">EVALUASI PRC<br><b style="font-size:1.1rem; text-transform:uppercase;">${kategoriEvaluasi}</b></div>`;
+
+        document.getElementById('eval-box').innerHTML = `
+            <h3 style="margin-top:0; color:var(--primary);">Rangkuman Evaluasi Teori TKP Polri</h3>
+            <p style="margin:6px 0;"><b>Total Soal:</b> ${TOTAL_SOAL} Butir</p>
+            <p style="margin:6px 0;"><b>Jawaban Benar:</b> ${jumlahBenar} (${nilaiAkhir}%)</p>
+            <p style="margin:6px 0;"><b>Jawaban Salah:</b> ${jumlahSalah}</p>
+            <p style="margin:6px 0;"><b>Klasifikasi Kemampuan:</b> ${kategoriEvaluasi}. ${nilaiAkhir >= 80 ? 'Penguasaan konsep teori Anda sudah sangat matang dan siap menghadapi ujian seleksi.' : 'Disarankan untuk mempelajari kembali modul materi teori TKP, khususnya pada bagian dimensi pengukuran dan skala persetujuan.'}</p>`;
+
+        document.getElementById('review-list').innerHTML = h;
+        window.scrollTo(0, 0);
+
+        sendResultToMaster(lastPayload);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const startBtn = document.getElementById('btn-start');
+        const nameInput = document.getElementById('pName');
+        const prevBtn = document.getElementById('btn-prev');
+        const nextBtn = document.getElementById('btn-next');
+        const finishBtn = document.getElementById('btn-finish');
+        const dlHtmlBtn = document.getElementById('btn-dl-html');
+
+        if (startBtn) startBtn.addEventListener('click', startExam);
+        if (nameInput) {
+            nameInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') { e.preventDefault(); startExam(); }
+            });
+        }
+        if (prevBtn) prevBtn.addEventListener('click', prevQ);
+        if (nextBtn) nextBtn.addEventListener('click', nextQ);
+        if (finishBtn) finishBtn.addEventListener('click', finalize);
+        if (dlHtmlBtn) dlHtmlBtn.addEventListener('click', downloadPembahasanHTML);
+    });
+})();
+</script>
+</body>
+</html>

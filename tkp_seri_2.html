@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asesmen Kepribadian TKP Seri 2 - Persona Research & Consulting</title>
+    <style>
+        :root { --primary: #0f1c3f; --accent: #b85d79; --cream: #faf7f2; --bg: #f3f4f6; --white: #ffffff; --success: #1e8449; --danger: #c0392b; }
+        * { box-sizing: border-box; -webkit-user-select: none; user-select: none; }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; color: #1f2937; }
+        header { background: var(--primary); color: var(--cream); padding: 1.1rem; text-align: center; border-bottom: 4px solid var(--accent); font-weight: 800; font-size: 1.35rem; letter-spacing: 0.5px; }
+        header small { color: #e2b8c6; font-size: 0.8rem; letter-spacing: 2px; display: block; margin-top: 4px; }
+        .main-container { display: none; flex: 1; max-width: 1200px; margin: 20px auto; gap: 20px; padding: 0 15px; width: 100%; }
+        .content-area { flex: 1; background: var(--white); padding: 30px; border-radius: 10px; box-shadow: 0 2px 12px rgba(15,28,63,0.08); }
+        .sidebar { width: 300px; background: var(--white); padding: 20px; border-radius: 10px; height: fit-content; position: sticky; top: 20px; box-shadow: 0 2px 12px rgba(15,28,63,0.08); }
+        .q-text { font-size: 1.08rem; font-weight: 600; color: var(--primary); margin-bottom: 20px; line-height: 1.65; text-align: justify; }
+        .option { display: flex; align-items: flex-start; padding: 14px 16px; border: 1.5px solid #d1d5db; border-radius: 8px; margin-bottom: 12px; cursor: pointer; transition: 0.2s; line-height: 1.55; background: #fff; }
+        .option:hover { border-color: var(--accent); background: var(--cream); }
+        .option.selected { border-color: var(--primary); background: #eef2ff; border-width: 2px; }
+        .nav-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 15px; }
+        .nav-dot { padding: 10px 0; text-align: center; background: #f3f4f6; border-radius: 5px; cursor: pointer; font-size: 12px; font-weight: bold; color: #374151; }
+        .nav-dot.current { border: 2px solid var(--accent); color: var(--accent); background: #fff; }
+        .nav-dot.filled { background: var(--primary); color: var(--cream); }
+        .btn { padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; width: 100%; margin-top: 10px; font-size: 0.95rem; transition: 0.2s; }
+        .btn-primary { background: var(--primary); color: var(--cream); }
+        .btn-primary:hover { opacity: 0.92; }
+        .btn-download { background: var(--accent); color: #ffffff; width: auto; display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; margin: 6px; font-size: 0.92rem; border-radius: 6px; box-shadow: 0 2px 8px rgba(184,93,121,0.28); }
+        .btn-download:hover { background: #9e4863; }
+        .btn-download-alt { background: var(--primary); color: var(--cream); width: auto; display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; margin: 6px; font-size: 0.92rem; border-radius: 6px; box-shadow: 0 2px 8px rgba(15,28,63,0.22); }
+        .btn-download-alt:hover { background: #192d61; }
+        #result-screen { display: none; padding: 40px 20px; text-align: center; }
+        .score-box { padding: 20px 26px; background: white; border-radius: 10px; min-width: 170px; box-shadow: 0 2px 10px rgba(15,28,63,0.08); display: inline-block; margin: 10px; border-top: 4px solid var(--accent); }
+        .dim-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; max-width: 820px; margin: 20px auto; }
+        .dim-box { background: white; padding: 16px; border-radius: 8px; box-shadow: 0 2px 8px rgba(15,28,63,0.07); border-bottom: 3px solid var(--primary); }
+        .download-panel { max-width: 820px; margin: 20px auto; background: var(--cream); border: 1.5px solid #e5d8dc; border-radius: 10px; padding: 20px; }
+        .download-panel h3 { margin: 0 0 6px 0; color: var(--primary); font-size: 1.05rem; }
+        .download-panel p { margin: 0 0 14px 0; font-size: 0.88rem; color: #4b5563; }
+        .sync-banner { max-width: 820px; margin: 15px auto; padding: 12px 18px; border-radius: 6px; font-weight: 600; font-size: 0.95rem; }
+        .sync-loading { background: #fff8e6; color: #8a6d3b; border: 1px solid #faebcc; }
+        .sync-ok { background: #eafaf1; color: #1e8449; border: 1px solid #d4efdf; }
+        .sync-err { background: #fdedec; color: #c0392b; border: 1px solid #fadbd8; }
+        .review-card { background: white; padding: 24px; margin-bottom: 20px; border-radius: 10px; text-align: left; border-left: 6px solid var(--accent); box-shadow: 0 2px 10px rgba(15,28,63,0.06); }
+        .review-opt { padding: 9px 13px; margin: 6px 0; border-radius: 6px; background: #f9fafb; border: 1px solid #e5e7eb; font-size: 0.93rem; line-height: 1.55; }
+        .review-opt.user-picked { border: 2px solid var(--primary); background: #eef2ff; }
+        .review-opt.best-opt { border-left: 4px solid var(--success); }
+        .badge-dim { display: inline-block; background: var(--primary); color: var(--cream); padding: 4px 10px; border-radius: 4px; font-size: 0.78rem; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.3px; }
+        .pembahasan-box { margin-top: 14px; font-size: 0.94rem; background: var(--cream); padding: 16px; border-radius: 8px; line-height: 1.65; color: #1f2937; border: 1px solid #ece3e6; }
+        .pembahasan-box p { margin: 0 0 10px 0; }
+        .pembahasan-box p:last-child { margin-bottom: 0; }
+        @media (max-width: 820px) {
+            .main-container { flex-direction: column; }
+            .sidebar { width: 100%; position: static; }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+<header>PERSONA RESEARCH & CONSULTING<small>LATIHAN TES KEPRIBADIAN (TKP) — SERI 2</small></header>
+
+<!-- FORM LOGIN TERSTRUKTUR -->
+<div id="login-screen" style="flex:1; display:flex; align-items:center; justify-content:center; padding:15px;">
+    <div style="background:white; padding:40px; border-radius:10px; width:100%; max-width:430px; text-align:center; box-shadow: 0 4px 16px rgba(15,28,63,0.1); border-top: 5px solid var(--accent);">
+        <h2 style="margin-top:0; color:var(--primary);">Data Peserta — Seri 2</h2>
+        <p style="font-size:0.88rem; color:#4b5563; margin-bottom:20px; line-height:1.5;">Instrumen Latihan Persiapan Seleksi POLRI (30 Butir Situasional Baru). Masukkan nama lengkap sesuai data pendaftaran PRC.</p>
+        
+        <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+            <input type="text" id="pName" placeholder="Nama Lengkap Peserta" required style="width:100%; padding:12px; margin-bottom:14px; border:1.5px solid #cbd5e1; border-radius:6px; font-size:1rem;" autocomplete="name">
+            <button type="submit" class="btn btn-primary">MULAI TES SERI 2</button>
+        </form>
+    </div>
+</div>
+
+<div class="main-container" id="exam-container">
+    <div class="content-area">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; font-size:0.88rem; color:#4b5563; border-bottom:1px solid #e5e7eb; padding-bottom:10px;">
+            <span id="peserta-badge" style="font-weight:700; color:var(--primary);"></span>
+            <span id="progress-badge">Terjawab: 0 / 30</span>
+        </div>
+        <div id="q-text" class="q-text"></div>
+        <div id="options"></div>
+        <div style="display:flex; gap:10px; margin-top: 20px;">
+            <button class="btn btn-primary" type="button" onclick="prevQ()">Kembali</button>
+            <button class="btn btn-primary" type="button" onclick="nextQ()">Selanjutnya</button>
+        </div>
+    </div>
+    <div class="sidebar">
+        <h4 style="margin-top:0; color:var(--primary);">Navigasi Soal (30 Butir)</h4>
+        <div class="nav-grid" id="nav-grid"></div>
+        <button id="btn-finish" class="btn btn-primary" type="button" style="margin-top:30px; background:#1e8449; color:white;" onclick="finalize()">SELESAI</button>
+    </div>
+</div>
+
+<div id="result-screen">
+    <h1 id="res-name" style="color:var(--primary); margin-bottom: 8px;"></h1>
+    <div id="sync-status" class="sync-banner sync-loading">Menyimpan hasil ke server PRC...</div>
+    <div id="score-area"></div>
+    <div id="dim-area" class="dim-grid"></div>
+
+    <div class="download-panel">
+        <h3>Folder Unduhan Hasil & Pembahasan Lengkap</h3>
+        <p>Unduh arsip soal, jawaban Anda, rincian skor per dimensi, serta pembahasan lengkap TKP Seri 2 untuk dipelajari secara luring (offline).</p>
+        <button class="btn btn-download" type="button" onclick="downloadPembahasanHTML()">Unduh Dokumen Pembahasan Lengkap (.HTML)</button>
+        <button class="btn btn-download-alt" type="button" onclick="downloadRingkasanCSV()">Unduh Rekap Skor & Jawaban (.CSV)</button>
+    </div>
+
+    <div style="max-width:820px; margin:16px auto 0 auto; text-align:left; font-size:0.85rem; color:#4b5563;">
+        <i>Catatan: Materi ini merupakan instrumen latihan internal Persona Research & Consulting (PRC) untuk pembinaan karakter calon peserta seleksi, bukan instrumen maupun standar norma resmi institusi POLRI.</i>
+    </div>
+    <div id="review-list" style="max-width:820px; margin:20px auto;"></div>
+</div>
+
+<script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyFxmO0ocvr5HqK2WuGyjt7_JeTOcs4vGDg7QZejeiE2QvCP_qkonJcZc5hz9AFW2Vg/exec";
+    const TOTAL_SOAL = 30;
+
+    let currentIdx = 0;
+    let questions = [];
+    let userSelections = {};
+    let pName = "";
+    let sessionId = "";
+    let startTimeObj = null;
+    let isSubmitting = false;
+    let isSubmitted = false;
+    let finalReportData = null;
+
+    const rawData = [
+        {
+            id: 1,
+            dimensi: "Prososial",
+            kriteria: "Jiwa sosial tinggi, sabar, dan patuh pada aturan",
+            kesulitan: "Mudah",
+            q: "Saat Anda bertugas di sentra pelayanan pembuatan surat keterangan kehilangan, seorang ibu yang menggendong bayi tampak kelelahan karena ruang tunggu penuh dan pendingin ruangan sedang diperbaiki. Nomor antreannya masih terpaut delapan urutan lagi. Langkah apa yang Anda ambil?",
+            opts: [
+                { t: "Mempersilakannya duduk di kursi tunggu prioritas dekat meja petugas yang lebih sejuk sambil memastikan nomor antreannya tetap dipanggil sesuai urutan yang adil.", s: 5 },
+                { t: "Menawarkan segelas air mineral dan meminta petugas kebersihan membawakan kipas angin tambahan ke area tunggu tersebut.", s: 4 },
+                { t: "Langsung memajukan antreannya ke urutan paling depan tanpa memberitahukan alasan kepada pengantre lain yang sudah menunggu lama.", s: 3 },
+                { t: "Menyarankannya menitipkan bayinya kepada anggota keluarga di luar gedung agar tidak kepanasan selama menunggu giliran.", s: 2 },
+                { t: "Membiarkannya tetap berdiri di barisan karena seluruh pemohon harus merasakan kondisi ruang tunggu yang sama.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Memberikan perhatian kemanusiaan kepada pemohon dengan bayi tanpa melanggar keadilan urutan pelayanan publik.",
+                diuji: "Empati sosial, kesabaran melayani, dan keadilan prosedural.",
+                s5: "Menyediakan tempat duduk nyaman di area prioritas sambil menjaga urutan antrean tetap adil memadukan kepedulian nyata dan ketertiban prosedur.",
+                s4: "Memberikan kenyamanan tambahan sudah baik, namun memindahkan ibu dan bayi ke area kursi prioritas jauh lebih cepat mengurangi kelelahan.",
+                s3: "Memotong antrean tanpa komunikasi terbuka berpotensi memicu protes dari pengantre lain yang juga sudah lama menunggu.",
+                s2: "Saran tersebut tidak realistis apabila pemohon datang seorang diri dan terkesan kurang empatik.",
+                s1: "Mengabaikan kebutuhan dasar ibu menggendong bayi mencerminkan rendahnya kepekaan sosial dalam pelayanan.",
+                pelajaran: "Pelayanan humanis selalu mencari cara memberi kenyamanan bagi kelompok rentan tanpa merusak rasa keadilan masyarakat luas."
+            }
+        },
+        {
+            id: 2,
+            dimensi: "Prososial",
+            kriteria: "Jiwa sosial tinggi dan setia pada organisasi",
+            kesulitan: "Mudah",
+            q: "Sepeda motor dinas yang digunakan rekan satu tim Anda mengalami ban bocor di tengah perjalanan menuju lokasi penyuluhan desa, padahal materi presentasi berada di tas yang dibawanya dan acara akan dimulai 20 menit lagi. Apa yang Anda lakukan?",
+            opts: [
+                { t: "Membonceng rekan beserta tas materi menuju lokasi acara agar penyuluhan dimulai tepat waktu, lalu membantu mengurus penambalan ban setelah acara selesai.", s: 5 },
+                { t: "Mengambil alih tas materi untuk dibawa lebih dulu ke lokasi acara sementara rekan menunggu perbaikan ban di bengkel terdekat.", s: 4 },
+                { t: "Menemaninya mendorong motor sampai menemukan bengkel terdekat meskipun membuat kedua petugas datang terlambat ke lokasi.", s: 3 },
+                { t: "Menghubungi panitia desa untuk menunda pembukaan acara sampai urusan perbaikan motor rekan selesai.", s: 2 },
+                { t: "Melanjutkan perjalanan sendiri ke lokasi acara karena kerusakan kendaraan merupakan tanggung jawab masing-masing pengendara.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Menyelamatkan agenda pelayanan masyarakat bersama rekan tim saat terjadi hambatan teknis di perjalanan.",
+                diuji: "Solidaritas rekan kerja, kepedulian pada kelancaran kegiatan masyarakat, dan kerja sama praktis.",
+                s5: "Membonceng rekan dan perlengkapan ke lokasi memastikan masyarakat terlayani tepat waktu sekaligus tetap mendampingi rekan menyelesaikan kendala kendaraannya sesudah tugas.",
+                s4: "Mengamankan materi agar acara mulai tepat waktu sudah baik, tetapi membonceng rekan sekaligus membuat tim hadir lengkap dan lebih tenang.",
+                s3: "Solidaritas yang mengorbankan ketepatan waktu masyarakat yang sudah berkumpul kurang mempertimbangkan kepentingan publik.",
+                s2: "Menunda acara warga padahal kendaraan Anda masih berfungsi baik menunjukkan kurangnya prioritas pada pelayanan.",
+                s1: "Meninggalkan rekan tanpa bantuan merusak kekompakan dan semangat saling menopang dalam tim.",
+                pelajaran: "Kerja sama yang efektif mendahulukan kepentingan masyarakat bersama-sama tanpa meninggalkan rekan yang mengalami kesulitan."
+            }
+        },
+        {
+            id: 3,
+            dimensi: "Prososial",
+            kriteria: "Jiwa sosial tinggi dan disiplin",
+            kesulitan: "Sedang",
+            q: "Di lingkungan asrama atau mess pelatihan, Anda mendapati seorang rekan tampak murung dan mengurung diri di kamar selama dua hari terakhir setelah menerima kabar bahwa adiknya gagal masuk perguruan tinggi yang diimpikan. Sikap Anda adalah...",
+            opts: [
+                { t: "Mengetuk kamarnya dengan sopan, mengajaknya berbincang santai di luar kamar, serta memberikan dukungan moral agar ia kembali bersemangat menjalani latihan.", s: 5 },
+                { t: "Membawakannya makanan saat jam makan malam dan menanyakan kabarnya secara singkat agar ia tahu ada rekan yang peduli.", s: 4 },
+                { t: "Memberitahukan kondisi rekan tersebut kepada pembina asrama agar segera diberikan konseling khusus.", s: 3 },
+                { t: "Memberinya ruang menyendiri selama beberapa hari sampai kesedihannya mereda dengan sendirinya.", s: 2 },
+                { t: "Menegurnya agar tidak membawa masalah keluarga ke lingkungan pelatihan karena dapat mengganggu kesiapan fisik.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Menunjukkan kepedulian psikologis dan kehangatan persaudaraan kepada rekan yang mengalami tekanan emosional.",
+                diuji: "Empati terhadap rekan sejawat, kemampuan membangun komunikasi suportif, dan kepedulian sosial.",
+                s5: "Hadir secara personal dengan pendekatan hangat dan mengajak berdialog membantu rekan keluar dari isolasi emosional tanpa merasa dihakimi.",
+                s4: "Perhatian lewat tindakan kecil sudah hangat, namun dialog suportif akan lebih membantu memulihkan semangatnya.",
+                s3: "Melapor ke pembina dapat membantu bila kondisi berat, tetapi sentuhan empati sesama rekan seharusnya dilakukan terlebih dahulu.",
+                s2: "Membiarkan rekan terisolasi terlalu lama berisiko memperdalam beban pikirannya.",
+                s1: "Teguran keras pada orang yang sedang berduka atau kecewa menunjukkan minimnya kepekaan perasaan.",
+                pelajaran: "Kepedulian sejawat sering kali menjadi penopang mental pertama yang menjaga rekan tetap kuat menjalani tugas dan pembinaan."
+            }
+        },
+        {
+            id: 4,
+            dimensi: "Prososial",
+            kriteria: "Jiwa sosial tinggi, sabar, dan patuh pada aturan",
+            kesulitan: "Sedang",
+            q: "Saat melaksanakan patroli dialogis di kawasan pasar tradisional, Anda melihat seorang pedagang kaki lima berdebat keras dengan petugas ketertiban pasar karena lapaknya dinilai melewati garis batas jalan. Kerumunan pembeli mulai berhenti menonton dan menghambat arus kendaraan. Tindakan Anda adalah...",
+            opts: [
+                { t: "Mendekati kedua pihak dengan tenang, mengajak pedagang menepi dari kerumunan untuk berdialog, dan membantu menata ulang posisi lapak di dalam batas yang diizinkan.", s: 5 },
+                { t: "Meminta kerumunan warga membubarkan diri terlebih dahulu agar perdebatan tidak menjadi tontonan yang memicu emosi.", s: 4 },
+                { t: "Berdiri mengawasi dari jarak dekat untuk memastikan tidak terjadi kontak fisik antara pedagang dan petugas pasar.", s: 3 },
+                { t: "Menegur pedagang agar segera membongkar lapaknya karena jelas-jelas melanggar batas jalan umum.", s: 2 },
+                { t: "Melanjutkan patroli ke blok pasar berikutnya karena penertiban lapak merupakan kewenangan penuh pengelola pasar.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Meredam konflik sosial di ruang publik melalui pendekatan persuasif yang menjaga ketertiban sekaligus menghormati mata pencaharian warga.",
+                diuji: "Keterampilan mediasi sosial, empati pada warga kecil, dan menjaga ketertiban umum.",
+                s5: "Memisahkan perdebatan dari kerumunan dan membantu menata lapak sesuai aturan menyelesaikan masalah lalu lintas secara bermartabat tanpa mempermalukan pedagang.",
+                s4: "Membubarkan kerumunan menurunkan tensi tontonan, tetapi akar sengketa batas lapak tetap perlu dibantu penyelesaiannya.",
+                s3: "Sikap pasif hanya mengawasi belum mencegah kemacetan arus kendaraan akibat perdebatan.",
+                s2: "Teguran keras di depan umum justru mempermalukan pedagang dan berisiko memicu perlawanan emosional.",
+                s1: "Mengabaikan potensi gangguan ketertiban di wilayah patroli bertentangan dengan fungsi pencegahan dini.",
+                pelajaran: "Pendekatan persuasif yang menghargai martabat warga sering kali jauh lebih efektif menegakkan aturan dibanding bentakan di depan umum."
+            }
+        },
+        {
+            id: 5,
+            dimensi: "Prososial",
+            kriteria: "Jiwa sosial tinggi dan disiplin",
+            kesulitan: "Sedang",
+            q: "Dalam kegiatan simulasi penanganan keadaan darurat, tim Anda diminta mengevakuasi peralatan logistik melintasi jalur berlumpur dengan batas waktu ketat. Salah satu anggota tim memiliki postur lebih kecil dan tampak kewalahan mengangkat beban peti bersama rekan lainnya. Apa yang Anda lakukan?",
+            opts: [
+                { t: "Menyesuaikan pembagian posisi angkat agar beban terdistribusi seimbang dan menugaskannya pada bagian pemandu jalur serta pengaman perlengkapan ringan.", s: 5 },
+                { t: "Mengambil alih peti yang sedang diangkatnya untuk Anda bawa sendiri sambil memintanya berjalan cepat di belakang.", s: 4 },
+                { t: "Memberinya semangat agar tetap bertahan mengangkat peti sampai garis akhir karena latihan memang menguji ketahanan fisik.", s: 3 },
+                { t: "Menukar posisinya dengan anggota lain tanpa menjelaskan alasan pengaturan ulang formasi kepada tim.", s: 2 },
+                { t: "Mengeluhkan lambatnya gerakan rekan tersebut karena membuat catatan waktu tim tertinggal.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Mengoptimalkan kerja sama tim dengan menempatkan setiap anggota sesuai kapasitas fisik tanpa merendahkan harga dirinya.",
+                diuji: "Kerja sama tim, kepekaan terhadap kekuatan dan keterbatasan rekan, serta orientasi keselamatan bersama.",
+                s5: "Mendistribusikan beban secara proporsional sekaligus memberinya peran penting sebagai pemandu jalur menjaga kecepatan tim, keselamatan personel, dan harga diri rekan.",
+                s4: "Membantu mengangkat beban sudah baik, tetapi membiarkannya berjalan tanpa peran jelas mengurangi rasa kontribusi dalam tim.",
+                s3: "Dorongan moral saja tanpa penyesuaian beban berisiko menyebabkan cedera fisik saat melintasi medan licin.",
+                s2: "Perubahan mendadak tanpa komunikasi dapat menimbulkan kebingungan formasi.",
+                s1: "Menyalahkan rekan melemahkan kekompakan dan merusak semangat kerja tim.",
+                pelajaran: "Tim yang tangguh bukan memaksakan beban sama rata secara buta, melainkan membagi peran secara cerdas agar seluruh anggota selamat dan berhasil."
+            }
+        },
+        {
+            id: 6,
+            dimensi: "Prososial",
+            kriteria: "Jiwa sosial tinggi, jujur, dan patuh pada aturan",
+            kesulitan: "Sedang",
+            q: "Seorang warga dari wilayah pelosok datang ke kantor pelayanan membawa berkas permohonan yang seluruhnya ditulis tangan dengan huruf yang sulit terbaca karena keterbatasan pendidikan. Petugas di loket sebelah tampak kesal dan hampir mengembalikan berkas tersebut. Sikap Anda adalah...",
+            opts: [
+                { t: "Menawarkan bantuan untuk membacakan dan menuliskan ulang isian formulir sesuai keterangan warga tersebut lalu memintanya memeriksa dan membubuhkan tanda tangan atau cap jempol.", s: 5 },
+                { t: "Menjelaskan dengan sabar bagian-bagian formulir yang harus diperbaiki dan memintanya menulis ulang di meja tunggu.", s: 4 },
+                { t: "Meminta petugas piket lain yang sedang senggang untuk membantu warga tersebut mengisi formulir dari awal.", s: 3 },
+                { t: "Menyarankannya pulang terlebih dahulu dan meminta bantuan perangkat desa untuk mengetikkan permohonannya.", s: 2 },
+                { t: "Membiarkan rekan loket sebelah menolaknya karena berkas yang tidak terbaca memang tidak memenuhi syarat administrasi.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Menjembatani hambatan literasi warga pelosok agar hak pelayanan administrasinya tetap terpenuhi secara sah dan bermartabat.",
+                diuji: "Empati sosial, kesabaran, dan kepatuhan pada keabsahan dokumen.",
+                s5: "Membantu menuliskan ulang berdasarkan keterangan langsung pemohon disertai verifikasi tanda tangan/cap jempol memastikan akurasi hukum sekaligus membantu warga tanpa membebani perjalanan jauh.",
+                s4: "Menjelaskan dengan sabar sudah baik, tetapi bila warga memiliki keterbatasan baca-tulis, menyuruh menulis ulang sendiri tetap menyulitkannya.",
+                s3: "Mengalihkan ke petugas lain membantu secara teknis, namun kesediaan Anda turun tangan langsung menunjukkan tanggung jawab sosial lebih tinggi.",
+                s2: "Menyuruh warga pelosok pulang demi mengetik ulang membuang biaya dan waktu tempuh masyarakat.",
+                s1: "Membiarkan warga ditolak karena keterbatasan pendidikan bertentangan dengan nilai pengayoman publik.",
+                pelajaran: "Empati dalam pelayanan administrasi berarti membantu warga mengatasi keterbatasan teknis tanpa mengurangi keabsahan prosedur."
+            }
+        },
+        {
+            id: 7,
+            dimensi: "Prososial",
+            kriteria: "Jiwa sosial tinggi, jujur, dan setia pada organisasi",
+            kesulitan: "Sulit",
+            q: "Dalam kegiatan pengabdian masyarakat berupa perbaikan jembatan kayu desa yang rusak akibat hujan deras, terjadi perbedaan pendapat antara kelompok pemuda desa yang ingin cepat selesai dengan cara seadanya dan warga senior yang menginginkan konstruksi diperkuat meski memakan waktu lebih lama. Anda bertugas mendampingi kegiatan tersebut. Langkah Anda adalah...",
+            opts: [
+                { t: "Mengajak perwakilan pemuda dan sesepuh desa berdiskusi singkat untuk menyepakati penguatan pada bagian penyangga utama terlebih dahulu agar jembatan aman dilalui dan pekerjaan tetap efisien.", s: 5 },
+                { t: "Mendukung usulan warga senior sepenuhnya karena faktor keselamatan pengguna jembatan tidak boleh dikorbankan demi kecepatan.", s: 4 },
+                { t: "Membagi pekerjaan menjadi dua tahap: perbaikan darurat hari ini agar bisa dilalui, lalu penguatan lanjutan pada akhir pekan berikutnya.", s: 3 },
+                { t: "Meminta kepala desa mengambil keputusan sepihak supaya perdebatan di lokasi kerja segera berhenti.", s: 2 },
+                { t: "Membiarkan warga desa menyelesaikannya sendiri karena perbedaan pendapat internal merupakan dinamika biasa di masyarakat.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Menyatukan energi pemuda dan kearifan warga senior untuk menghasilkan solusi kerja bakti yang aman sekaligus realistis.",
+                diuji: "Kemampuan membangun hubungan sosial lintas generasi, kepedulian keselamatan publik, dan keterampilan memfasilitasi kesepakatan.",
+                s5: "Mempertemukan kedua sudut pandang dengan memprioritaskan titik kritis keamanan konstruksi menghargai semangat pemuda sekaligus menjamin keselamatan jangka panjang.",
+                s4: "Mengutamakan keselamatan sudah tepat, tetapi tanpa merangkul pemuda dengan dialog, semangat gotong royong mereka bisa menurun.",
+                s3: "Pembagian dua tahap cukup praktis, namun jembatan darurat yang belum kuat penyangganya tetap berisiko membahayakan warga.",
+                s2: "Mengandalkan keputusan sepihak tanpa musyawarah mengurangi rasa memiliki warga terhadap hasil kerja bakti.",
+                s1: "Sikap pasif membiarkan konflik berlarut dan menunda pemulihan akses vital warga.",
+                pelajaran: "Fasilitator sosial yang baik tidak memihak salah satu kelompok, melainkan menemukan titik temu teknis yang menyelamatkan kepentingan bersama."
+            }
+        },
+        {
+            id: 8,
+            dimensi: "Prososial",
+            kriteria: "Jiwa sosial tinggi, patuh pada aturan, dan jujur",
+            kesulitan: "Sulit",
+            q: "Saat terjadi pemadaman listrik meluas di malam hari pada kawasan permukiman padat, lampu pengatur lalu lintas di persimpangan utama padam total dan beberapa pengendara mulai saling mengunci jalur. Anda sedang melintas dalam perjalanan pulang seusai dinas dengan pakaian sipil namun membawa kartu identitas resmi. Tindakan Anda adalah...",
+            opts: [
+                { t: "Mengamankan kendaraan Anda di tepi jalan, mengenakan tanda pengenal yang terlihat jelas, dan segera mengatur arus persimpangan secara terukur sambil menghubungi pos lalu lintas terdekat.", s: 5 },
+                { t: "Menghubungi pos lalu lintas terdekat untuk meminta petugas piket segera turun ke lokasi sambil menunggu di tepi jalan.", s: 4 },
+                { t: "Mengajak beberapa warga sekitar persimpangan untuk membantu mengarahkan kendaraan dari pinggir jalan tanpa turun ke tengah persimpangan.", s: 3 },
+                { t: "Mencari jalur alternatif memutar melalui gang permukiman agar kendaraan Anda tidak ikut terjebak kemacetan.", s: 2 },
+                { t: "Tetap berada di dalam kendaraan menunggu arus terurai sendiri karena jam dinas Anda sudah berakhir.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Panggilan pengabdian untuk hadir mengurai kemacetan dan mencegah kecelakaan di ruang publik meskipun sedang di luar jam piket.",
+                diuji: "Jiwa sosial tinggi, kepedulian terhadap keselamatan umum, dan tanggung jawab moral sebagai pengayom masyarakat.",
+                s5: "Memastikan keselamatan pribadi dan identitas jelas, langsung mengurai kemacetan, serta berkoordinasi dengan pos terdekat mencerminkan pengabdian tanpa batas jam dinas.",
+                s4: "Melapor ke pos lalu lintas sudah bertanggung jawab, tetapi tindakan langsung mengurai simpul kemacetan mencegah kebuntuan semakin parah.",
+                s3: "Mengandalkan warga tanpa kehadiran pengatur utama di titik temu masih berisiko menimbulkan arah isyarat yang bertabrakan.",
+                s2: "Menghindar demi kenyamanan perjalanan pribadi mengabaikan kebutuhan mendesak masyarakat di persimpangan.",
+                s1: "Beralasan jam dinas selesai saat masyarakat membutuhkan bantuan bertentangan dengan jiwa pengabdian.",
+                pelajaran: "Jiwa pengayom masyarakat tidak berhenti saat jam piket usai; ketika keselamatan publik terancam, kehadiran kita adalah panggilan nurani."
+            }
+        },
+        {
+            id: 9,
+            dimensi: "Kepercayaan Diri",
+            kriteria: "Percaya diri dan disiplin",
+            kesulitan: "Mudah",
+            q: "Anda ditunjuk mendadak oleh pembina untuk memimpin pemanasan fisik dan peregangan di depan seluruh peserta pelatihan pagi ini karena instruktur utama sedang menerima panggilan penting. Padahal Anda baru pertama kali berdiri di depan barisan besar. Sikap Anda adalah...",
+            opts: [
+                { t: "Melangkah maju dengan sikap tegap, memberi aba-aba dengan suara lantang dan jelas, serta memimpin gerakan secara sistematis hingga instruktur kembali.", s: 5 },
+                { t: "Maju ke depan barisan dan memimpin gerakan dasar yang paling Anda kuasai dengan tempo pelan agar tidak salah hitungan.", s: 4 },
+                { t: "Mengajak satu rekan di barisan depan untuk maju mendampingi Anda menghitung gerakan bersama-sama.", s: 3 },
+                { t: "Menanyakan berulang kali kepada pembina apakah urutan gerakan yang Anda lakukan sudah benar di tengah barisan.", s: 2 },
+                { t: "Meminta rekan di sebelah Anda yang menggantikan karena merasa gugup berbicara di depan banyak orang.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Kesiapan tampil memimpin di depan umum secara spontan dengan sikap mantap dan suara tegas.",
+                diuji: "Keyakinan terhadap kemampuan diri dan keberanian mengambil peran di depan banyak orang.",
+                s5: "Tampil tegap dengan suara lantang dan urutan gerakan yang teratur menunjukkan kesiapan mental serta kepercayaan diri yang menular pada barisan.",
+                s4: "Berani maju dan memimpin gerakan dasar sudah baik, namun keyakinan penuh dalam memberi aba-aba akan membuat barisan lebih bersemangat.",
+                s3: "Meminta pendampingan saat tugas sederhana seperti pemanasan menunjukkan keraguan terhadap kapasitas diri sendiri.",
+                s2: "Bertanya berulang kali di tengah pelaksanaan mengurangi wibawa dan kelancaran pimpinan barisan.",
+                s1: "Menghindari kesempatan tampil karena gugup menghambat pembentukan mental kepemimpinan.",
+                pelajaran: "Kepercayaan diri di depan barisan dibangun dari sikap tubuh yang mantap, suara yang jelas, dan fokus pada tugas."
+            }
+        },
+        {
+            id: 10,
+            dimensi: "Kepercayaan Diri",
+            kriteria: "Percaya diri dan setia pada organisasi",
+            kesulitan: "Mudah",
+            q: "Dalam penyusunan materi edukasi bahaya penipuan daring bagi pelajar SMA, ketua tim menawarkan siapa yang bersedia menjadi narasumber utama di aula sekolah yang dihadiri 300 siswa. Sebagian besar rekan ragu karena audiens remaja dikenal kritis dan mudah bosan. Langkah Anda adalah...",
+            opts: [
+                { t: "Mengajukan diri sebagai narasumber utama, menyiapkan contoh kasus penipuan yang dekat dengan keseharian pelajar, dan melatih penyampaian interaktif.", s: 5 },
+                { t: "Menyatakan bersedia menjadi narasumber apabila tidak ada rekan lain yang lebih senior mengajukan diri.", s: 4 },
+                { t: "Menawarkan diri hanya untuk membacakan bagian pembuka dan penutup sementara materi inti dibagi ke beberapa rekan.", s: 3 },
+                { t: "Mengusulkan agar materi disampaikan melalui pemutaran video saja tanpa perlu ada narasumber yang berbicara panjang.", s: 2 },
+                { t: "Memilih bertugas di bagian dokumentasi foto supaya tidak perlu berhadapan langsung dengan pertanyaan siswa.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Keberanian mengambil tanggung jawab publik dan menyiapkan strategi komunikasi yang relevan dengan karakteristik audiens.",
+                diuji: "Kesanggupan menerima tanggung jawab menantang dan keyakinan terhadap persiapan diri.",
+                s5: "Mengajukan diri secara proaktif sekaligus menyiapkan materi kontekstual yang interaktif menunjukkan kepercayaan diri yang ditopang persiapan matang.",
+                s4: "Bersedia bertugas jika dibutuhkan sudah positif, namun masih terlihat menunggu orang lain lebih dulu.",
+                s3: "Membagi porsi kecil mengurangi beban, tetapi belum menunjukkan keberanian memikul peran utama.",
+                s2: "Mengganti interaksi langsung dengan video mengurangi efektivitas edukasi dan menunjukkan penghindaran tantangan.",
+                s1: "Menghindar ke peran di balik layar karena takut pertanyaan audiens mencerminkan kurangnya keyakinan diri.",
+                pelajaran: "Kepercayaan diri tumbuh paling kuat ketika keberanian mengambil peran diimbangi dengan persiapan materi yang matang."
+            }
+        },
+        {
+            id: 11,
+            dimensi: "Kepercayaan Diri",
+            kriteria: "Percaya diri dan disiplin",
+            kesulitan: "Mudah",
+            q: "Saat memeriksa kesiapan ruang rapat koordinasi lintas unit yang akan dimulai 30 menit lagi, Anda mendapati proyektor utama tidak menampilkan gambar meskipun kabel sudah terpasang, sementara teknisi gedung sedang menangani gangguan di lantai lain. Tindakan Anda adalah...",
+            opts: [
+                { t: "Segera memeriksa pengaturan tampilan perangkat, mencoba kabel dan port cadangan yang tersedia, serta menyiapkan salinan digital bahan paparan di layar cadangan bila diperlukan.", s: 5 },
+                { t: "Menghubungi teknisi gedung agar segera datang sambil menanyakan langkah pengecekan awal lewat telepon.", s: 4 },
+                { t: "Memindahkan lokasi rapat ke ruangan lain tanpa memeriksa terlebih dahulu apakah masalah proyektor hanya pada pengaturan tampilan.", s: 3 },
+                { t: "Menunggu teknisi gedung selesai dari lantai lain sambil memberitahukan peserta rapat bahwa acara kemungkinan tertunda.", s: 2 },
+                { t: "Membiarkan kondisi tersebut karena urusan perangkat elektronik bukan bagian dari tugas administrasi Anda.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Kemandirian dan inisiatif memecahkan kendala teknis mendesak sebelum rapat resmi dimulai.",
+                diuji: "Inisiatif pemecahan masalah, kemandirian bertindak, dan ketenangan menghadapi gangguan teknis.",
+                s5: "Melakukan pengecekan mandiri secara sistematis sekaligus menyiapkan opsi cadangan memastikan rapat tetap berjalan lancar tanpa bergantung sepenuhnya pada pihak lain.",
+                s4: "Menghubungi teknisi sambil meminta panduan cukup responsif, namun pengecekan dasar langsung jauh lebih cepat.",
+                s3: "Langsung memindahkan ruangan tanpa mendiagnosis penyebab sederhana dapat menimbulkan kerepotan baru bagi peserta.",
+                s2: "Pasif menunggu teknisi berisiko menunda jalannya koordinasi penting.",
+                s1: "Bersikap masa bodoh terhadap hambatan acara bersama menunjukkan rendahnya rasa tanggung jawab.",
+                pelajaran: "Kemandirian kerja tampak saat kita berani mencari solusi teknis pertama secara tenang sebelum menyimpulkan jalan buntu."
+            }
+        },
+        {
+            id: 12,
+            dimensi: "Kepercayaan Diri",
+            kriteria: "Percaya diri dan jujur",
+            kesulitan: "Sedang",
+            q: "Anda menyusun usulan inovasi alur registrasi tamu kantor berbasis kode pindai cepat untuk mengurangi penumpukan di pos penjagaan. Saat dipresentasikan, seorang rekan senior meragukan efektivitasnya dengan alasan tamu lanjut usia akan kesulitan menggunakannya. Sikap Anda adalah...",
+            opts: [
+                { t: "Menyambut masukan tersebut dengan tenang, menjelaskan bahwa sistem tetap menyediakan jalur registrasi manual berbantuan petugas bagi tamu lansia, lalu menunjukkan simulasi alurnya.", s: 5 },
+                { t: "Menjelaskan bahwa sebagian besar tamu kantor saat ini sudah terbiasa menggunakan ponsel pintar sehingga sistem tetap layak diterapkan.", s: 4 },
+                { t: "Mengusulkan agar ide tersebut ditunda dulu sampai ditemukan cara agar semua usia bisa memakainya tanpa bantuan.", s: 3 },
+                { t: "Merasa ragu dengan rancangan sendiri dan menarik kembali usulan tersebut agar tidak memicu perdebatan dengan senior.", s: 2 },
+                { t: "Membalas dengan mengatakan bahwa cara lama terlalu lambat dan sudah ketinggalan zaman.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Mempertahankan gagasan inovatif secara rasional dengan menjawab kelemahan potensial secara inklusif.",
+                diuji: "Keyakinan terhadap gagasan sendiri, kematangan merespons keraguan, dan kemampuan berpikir solutif.",
+                s5: "Mengakui validitas perhatian senior sekaligus menunjukkan mekanisme pendampingan inklusif membuktikan gagasan Anda telah dipikirkan secara matang dan menyeluruh.",
+                s4: "Mempertahankan ide berdasarkan mayoritas pengguna cukup logis, tetapi belum menjawab solusi bagi kelompok tamu lansia.",
+                s3: "Menunda inovasi karena satu kendala yang sebenarnya bisa diatasi dengan jalur pendampingan menunjukkan keraguan diri.",
+                s2: "Menarik usulan hanya karena satu sanggahan memperlihatkan kurangnya daya juang terhadap gagasan baik.",
+                s1: "Merendahkan cara lama dengan nada defensif merusak suasana diskusi profesional.",
+                pelajaran: "Gagasan yang kuat tidak takut diuji; ia justru semakin meyakinkan ketika mampu mengakomodasi masukan kritis menjadi solusi yang lebih lengkap."
+            }
+        },
+        {
+            id: 13,
+            dimensi: "Kepercayaan Diri",
+            kriteria: "Percaya diri dan patuh pada aturan",
+            kesulitan: "Sedang",
+            q: "Anda diberi tugas menyusun peta kerawanan lingkungan wilayah binaan baru dalam waktu tiga hari, padahal Anda baru pertama kali ditempatkan di wilayah tersebut dan belum memiliki catatan sejarah kejadian tahun sebelumnya. Langkah Anda adalah...",
+            opts: [
+                { t: "Mengumpulkan arsip laporan kejadian di kantor, melakukan survei langsung ke titik-titik strategis wilayah, dan berdialog dengan tokoh masyarakat setempat untuk menyusun peta secara akurat.", s: 5 },
+                { t: "Mempelajari arsip laporan yang tersedia di kantor lalu menyusun peta berdasarkan data statistik tiga bulan terakhir.", s: 4 },
+                { t: "Meminta rekan dari unit lain yang pernah bertugas di sana untuk menyusun kerangka petanya terlebih dahulu.", s: 3 },
+                { t: "Menyalin format peta dari wilayah tetangga dan menyesuaikan nama jalannya agar selesai tepat waktu.", s: 2 },
+                { t: "Melaporkan kepada pimpinan bahwa tugas tersebut sulit diselesaikan karena Anda masih baru di wilayah tersebut.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Kemandirian dan ketangguhan menyelesaikan tugas analisis wilayah baru melalui kombinasi data arsip dan observasi lapangan.",
+                diuji: "Kemandirian kerja, keberanian menghadapi tantangan baru, dan ketelitian analisis.",
+                s5: "Memadukan data historis kantor, observasi lapangan langsung, dan masukan tokoh lokal menghasilkan pemetaan yang akurat dan menunjukkan kemandirian tinggi.",
+                s4: "Menggunakan arsip statistik adalah langkah awal yang benar, namun tanpa pengecekan lapangan gambaran kerawanan menjadi kurang utuh.",
+                s3: "Mengandalkan rekan lain menyusun kerangka mengurangi kemandirian dalam tanggung jawab tugas pribadi.",
+                s2: "Menyalin data wilayah lain adalah jalan pintas yang menyesatkan dan melanggar integritas analisis.",
+                s1: "Menyerah sebelum berusaha atas alasan personel baru menunjukkan rendahnya rasa percaya diri.",
+                pelajaran: "Keterbatasan pengalaman di tempat baru dapat diatasi dengan kerja lapangan yang tekun dan keberanian menggali sumber data secara mandiri."
+            }
+        },
+        {
+            id: 14,
+            dimensi: "Kepercayaan Diri",
+            kriteria: "Percaya diri, jujur, dan setia pada organisasi",
+            kesulitan: "Sulit",
+            q: "Dalam sebuah tim verifikasi penerima bantuan sosial, Anda menemukan bahwa salah satu nama yang diusulkan oleh koordinator lapangan memiliki usaha toko grosir besar dan rumah mewah, sehingga jelas tidak memenuhi kriteria penerima. Anggota tim lain enggan mencoret nama tersebut karena khawatir berhadapan dengan koordinator lapangan yang cukup disegani. Sikap Anda adalah...",
+            opts: [
+                { t: "Menyajikan bukti hasil verifikasi lapangan secara objektif dalam rapat tim dan mengusulkan pencoretan nama tersebut sesuai kriteria resmi yang berlaku.", s: 5 },
+                { t: "Mencatat temuan ketidaksesuaian tersebut di lembar lampiran verifikasi agar keputusan pencoretan diambil langsung oleh pimpinan tertinggi.", s: 4 },
+                { t: "Menanyakan secara pribadi kepada koordinator lapangan mengenai alasan masuknya nama tersebut tanpa menyatakan sikap keberatan.", s: 3 },
+                { t: "Mengikuti keputusan anggota tim lainnya untuk meloloskan nama tersebut demi menjaga keharmonisan hubungan kerja.", s: 2 },
+                { t: "Menghapus tanda tangan Anda dari berita acara verifikasi secara diam-diam tanpa menyampaikan alasan kepada tim.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Keberanian moral mempertahankan objektivitas dan keadilan aturan di tengah tekanan sosial kelompok.",
+                diuji: "Keberanian berpendapat berbasis fakta, integritas, dan keteguhan prinsip.",
+                s5: "Membawa bukti objektif ke dalam forum resmi tim dan mengusulkan keputusan sesuai aturan menunjukkan kepercayaan diri moral dan komitmen pada keadilan.",
+                s4: "Mencatat temuan secara tertulis menjaga jejak fakta, namun menyuarakannya langsung dalam rapat tim lebih tegas menegakkan prinsip.",
+                s3: "Bertanya tanpa menyatakan sikap berisiko membuat temuan berhenti pada penjelasan sepihak.",
+                s2: "Mengorbankan keadilan publik demi kenyamanan relasi internal adalah bentuk kompromi yang keliru.",
+                s1: "Menarik diri diam-diam tanpa menyuarakan kebenaran tidak mencegah penyaluran bantuan yang salah sasaran.",
+                pelajaran: "Kepercayaan diri sejati teruji ketika kita berani berdiri membela kebenaran berbasis data meskipun mayoritas memilih diam."
+            }
+        },
+        {
+            id: 15,
+            dimensi: "Kepercayaan Diri",
+            kriteria: "Percaya diri, patuh pada aturan, dan jujur",
+            kesulitan: "Sulit",
+            q: "Saat Anda bertugas menjaga gerbang utama kegiatan kenegaraan tingkat daerah, seorang tamu VIP datang tanpa membawa kartu undangan fisik maupun terdaftar dalam daftar tamu resmi panitia, lalu meminta Anda segera membuka akses masuk karena acara sudah dimulai. Pengawal tamu tersebut mendesak dengan nada tinggi. Keputusan Anda adalah...",
+            opts: [
+                { t: "Menyapa dengan hormat, menjelaskan aturan pengamanan secara tegas dan tenang, menahan akses sementara di pos pemeriksaan, serta segera menghubungi ketua panitia protokol untuk verifikasi resmi.", s: 5 },
+                { t: "Mempersilakan tamu tersebut menunggu di ruang transit pos jaga sambil meminta pengawalnya mengurus undangan susulan ke panitia.", s: 4 },
+                { t: "Meminta kartu identitas tamu tersebut untuk dicatat lalu mengizinkannya masuk supaya tidak terjadi keributan di depan gerbang.", s: 3 },
+                { t: "Menyerahkan keputusan sepenuhnya kepada rekan jaga di sebelah Anda karena merasa tertekan oleh nada tinggi pengawal tamu.", s: 2 },
+                { t: "Langsung membuka gerbang karena penampilan dan kendaraan tamu tersebut tampak meyakinkan sebagai pejabat penting.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Keteguhan mengambil keputusan sesuai prosedur pengamanan ketika menghadapi tekanan status sosial dan intimidasi verbal.",
+                diuji: "Keberanian mengambil keputusan tegas, ketenangan menghadapi tekanan, dan kepatuhan pada SOP pengamanan.",
+                s5: "Tetap santun namun tegas menegakkan verifikasi protokol sebelum membuka akses menjaga keamanan acara tanpa bersikap kasar kepada tamu.",
+                s4: "Mengarahkan ke ruang transit cukup baik untuk meredam situasi, tetapi verifikasi langsung oleh petugas ke ketua protokol lebih menjamin kepastian prosedur.",
+                s3: "Mengizinkan masuk tanpa verifikasi protokol resmi menciptakan celah keamanan serius pada acara kenegaraan.",
+                s2: "Melempar tanggung jawab saat situasi menekan menunjukkan keraguan dalam mengambil keputusan tugas.",
+                s1: "Menilai kelayakan keamanan hanya dari penampilan fisik melanggar prinsip dasar pengamanan.",
+                pelajaran: "Wibawa petugas penjagaan lahir dari keberanian menegakkan aturan secara santun dan konsisten kepada siapa pun tanpa pandang status."
+            }
+        },
+        {
+            id: 16,
+            dimensi: "Pengendalian Diri",
+            kriteria: "Sabar dan patuh pada aturan",
+            kesulitan: "Mudah",
+            q: "Saat Anda sedang menjalankan tugas pengaturan parkir pada acara perayaan hari besar di lapangan kota, seorang pemilik mobil memarkir kendaraannya tepat di depan jalur keluar kendaraan darurat dan menolak memindahkannya dengan alasan hanya sebentar. Reaksi Anda adalah...",
+            opts: [
+                { t: "Tetap tenang, menjelaskan dengan tegas dan sopan bahwa jalur tersebut wajib steril demi keselamatan bersama, lalu mengarahkannya ke kantong parkir terdekat.", s: 5 },
+                { t: "Memberinya batas waktu dua menit untuk menyelesaikan urusannya sambil Anda berdiri menjaga di samping kendaraan tersebut.", s: 4 },
+                { t: "Mencatat nomor polisi kendaraannya dan menunggu pemilik kembali sambil mengingatkan pengendara lain agar tidak ikut parkir di situ.", s: 3 },
+                { t: "Menegurnya dengan nada kesal karena sikap egoisnya dapat membahayakan akses ambulans maupun pemadam kebakaran.", s: 2 },
+                { t: "Membiarkannya parkir di sana selama tidak ada kendaraan darurat yang melintas saat itu.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Menjaga ketenangan emosi sambil menegakkan sterilitas jalur keselamatan publik secara konsisten.",
+                diuji: "Kesabaran, pengendalian emosi, dan kepatuhan terhadap standar keselamatan.",
+                s5: "Menjelaskan alasan keselamatan secara tenang dan tegas serta memberi arah parkir pengganti menyelesaikan pelanggaran tanpa konflik emosional.",
+                s4: "Memberi kelonggaran waktu pada jalur darurat tetap berisiko apabila situasi darurat terjadi mendadak.",
+                s3: "Menunggu kendaraan tetap terparkir di jalur terlarang tidak menghilangkan hambatan fisik di lapangan.",
+                s2: "Nada kesal memperbesar potensi adu mulut di ruang publik yang ramai.",
+                s1: "Mengabaikan pelanggaran pada jalur darurat melanggar prinsip pencegahan risiko.",
+                pelajaran: "Ketegasan yang disampaikan dengan kepala dingin dan alasan keselamatan yang jelas jauh lebih mudah dipatuhi masyarakat."
+            }
+        },
+        {
+            id: 17,
+            dimensi: "Pengendalian Diri",
+            kriteria: "Jujur dan disiplin",
+            kesulitan: "Mudah",
+            q: "Setelah kegiatan pelatihan lapangan selesai, Anda mendapati satu unit perangkat komunikasi genggam (HT) cadangan terbawa di dalam tas perlengkapan Anda karena tercampur saat berkemas terburu-buru. Inventaris kantor belum sempat mengecek pengembalian karena hari sudah sore. Tindakan Anda adalah...",
+            opts: [
+                { t: "Segera kembali atau menghubungi petugas logistik hari itu juga untuk mengembalikan perangkat tersebut dan mencatatnya di buku serah terima inventaris.", s: 5 },
+                { t: "Menyimpan perangkat tersebut dengan aman di rumah dan mengembalikannya ke bagian logistik pada pagi hari berikutnya.", s: 4 },
+                { t: "Mengabari rekan satu tim bahwa perangkat itu ada pada Anda tanpa melapor ke petugas pengelola inventaris.", s: 3 },
+                { t: "Menunggu petugas logistik menanyakan keberadaan perangkat tersebut baru Anda mengembalikannya.", s: 2 },
+                { t: "Memanfaatkannya untuk keperluan pribadi sementara waktu karena jumlah unit cadangan di kantor masih banyak.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Kejujuran dan kedisiplinan dalam menjaga akuntabilitas barang inventaris dinas.",
+                diuji: "Kejujuran, disiplin administrasi barang milik negara/organisasi, dan tanggung jawab.",
+                s5: "Segera melapor dan mengembalikan sesuai pencatatan serah terima mencegah kekhawatiran kehilangan inventaris serta memastikan kesiapan peralatan untuk piket berikutnya.",
+                s4: "Berniat mengembalikan besok pagi sudah jujur, namun melapor dan mengembalikan segera menghindarkan kepanikan petugas piket malam saat pengecekan aset.",
+                s3: "Melapor hanya ke rekan tanpa ke petugas logistik membuat administrasi inventaris tetap menggantung.",
+                s2: "Menunggu ditanya baru mengembalikan menunjukkan kurangnya inisiatif kejujuran.",
+                s1: "Menggunakan aset dinas untuk kepentingan pribadi adalah penyalahgunaan wewenang dan ketidakjujuran.",
+                pelajaran: "Disiplin menjaga aset organisasi berarti segera meluruskan kesalahan administrasi sekecil apa pun tanpa menunggu pemeriksaan."
+            }
+        },
+        {
+            id: 18,
+            dimensi: "Pengendalian Diri",
+            kriteria: "Disiplin dan patuh pada aturan",
+            kesulitan: "Sulit",
+            q: "Anda dijadwalkan mengikuti ujian evaluasi kompetensi internal pada pukul 08.00 WIB. Saat perjalanan menuju lokasi, hujan deras turun disertai genangan air yang memperlambat arus kendaraan. Beberapa rekan yang terjebak kemacetan serupa menyarankan agar Anda meminta soal susulan secara daring saja dengan alasan kondisi cuaca. Sikap Anda adalah...",
+            opts: [
+                { t: "Tetap melanjutkan perjalanan dengan hati-hati menuju lokasi ujian, mengabarkan posisi Anda kepada panitia secara jujur, dan segera mengikuti ujian setibanya di ruangan sesuai aturan yang berlaku.", s: 5 },
+                { t: "Mencari jalur alternatif tercepat agar dapat tiba sebelum pukul 08.00 WIB meskipun kondisi jalan cukup licin.", s: 4 },
+                { t: "Meminta izin panitia untuk mengikuti ujian susulan secara daring sebagaimana usulan rekan-rekan lain.", s: 3 },
+                { t: "Berteduh menunggu hujan reda sepenuhnya meskipun waktu ujian sudah berjalan setengah jam.", s: 2 },
+                { t: "Memutuskan pulang dan mengaku mengalami gangguan kendaraan agar mendapat jadwal ujian ulang tanpa potongan nilai.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Menjaga komitmen kedisiplinan hadir langsung sesuai aturan di tengah hambatan cuaca tanpa mencari alasan pembenaran.",
+                diuji: "Kedisiplinan, ketahanan menghadapi hambatan, dan kepatuhan pada tata tertib evaluasi.",
+                s5: "Tetap berupaya hadir langsung dengan mengutamakan keselamatan serta berkomunikasi jujur kepada panitia menunjukkan integritas dan kedisiplinan tinggi.",
+                s4: "Berupaya mengejar waktu sudah disiplin, namun tetap harus mengutamakan keselamatan berkendara di jalan licin.",
+                s3: "Mengajukan keringanan daring sebelum berusaha maksimal hadir langsung mencerminkan rendahnya daya tahan disiplin.",
+                s2: "Menunggu hingga setengah waktu ujian berlalu tanpa upaya maksimal mengurangi keseriusan terhadap kewajiban.",
+                s1: "Membuat alasan palsu untuk menghindari jadwal resmi adalah pelanggaran kejujuran dan disiplin.",
+                pelajaran: "Disiplin diuji ketika situasi tidak nyaman; orang berintegritas tetap menempuh jalur aturan yang sah alih-alih mencari alasan."
+            }
+        },
+        {
+            id: 19,
+            dimensi: "Pengendalian Diri",
+            kriteria: "Sabar, disiplin, dan setia pada organisasi",
+            kesulitan: "Sedang",
+            q: "Anda telah merencanakan acara syukuran sederhana bersama keluarga di rumah pada akhir pekan ini. Namun dua hari sebelumnya, satuan menetapkan jadwal latihan gabungan mendadak pada hari yang sama untuk persiapan pengamanan agenda besar daerah. Reaksi Anda adalah...",
+            opts: [
+                { t: "Menerima penugasan latihan dengan ikhlas, menjelaskan kepada keluarga secara baik-baik untuk menjadwal ulang acara keluarga, dan hadir penuh semangat.", s: 5 },
+                { t: "Mengikuti latihan gabungan tersebut sejak pagi dan meminta izin pulang lebih awal apabila sesi inti telah selesai.", s: 4 },
+                { t: "Menghadiri latihan gabungan dengan perasaan berat hati sehingga kurang aktif berpartisipasi dalam diskusi taktis.", s: 3 },
+                { t: "Mengajukan permohonan pengecualian kepada komandan dengan alasan acara keluarga sudah dipersiapkan jauh hari.", s: 2 },
+                { t: "Tidak menghadiri latihan gabungan dan baru mengirimkan surat keterangan keluarga pada hari Senin berikutnya.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Menempatkan kepentingan tugas dan kesiapan satuan di atas agenda pribadi tanpa membawa kekecewaan ke dalam tugas.",
+                diuji: "Pengendalian emosi kecewa, kedisiplinan, dan kesetiaan pada organisasi.",
+                s5: "Mengelola kekecewaan pribadi secara dewasa, mengomunikasikan pengertian dengan keluarga, dan hadir penuh komitmen menunjukkan kesiapan mental abdi negara.",
+                s4: "Hadir mengikuti latihan sudah baik, namun meminta pulang lebih awal di tengah agenda persiapan besar mengurangi kesiapan tim.",
+                s3: "Hadir secara fisik tetapi setengah hati menurunkan kualitas latihan pribadi maupun kekompakan regu.",
+                s2: "Meminta pengecualian untuk acara non-darurat menunjukkan prioritas pribadi di atas kepentingan satuan.",
+                s1: "Mangkir tanpa izin resmi adalah pelanggaran disiplin berat.",
+                pelajaran: "Ketangguhan mental terlihat dari kemampuan menata perasaan kecewa dan tetap memberikan performa terbaik saat panggilan tugas datang."
+            }
+        },
+        {
+            id: 20,
+            dimensi: "Pengendalian Diri",
+            kriteria: "Jujur, patuh pada aturan, dan setia pada organisasi",
+            kesulitan: "Sedang",
+            q: "Seorang pemilik usaha tempat hiburan malam di wilayah patroli Anda menyodorkan amplop berisi sejumlah uang kepada tim Anda sebagai tanda terima kasih karena kawasan tersebut dinilai aman, sambil berpesan agar jadwal patroli ke tempatnya tidak terlalu sering dilakukan. Sikap Anda adalah...",
+            opts: [
+                { t: "Menolak pemberian tersebut secara tegas dan sopan, menjelaskan bahwa menjaga keamanan adalah kewajiban dinas tanpa imbalan, serta tetap melaksanakan patroli sesuai jadwal standar.", s: 5 },
+                { t: "Menolak amplop tersebut dengan halus dan segera meninggalkan lokasi untuk melanjutkan rute patroli berikutnya.", s: 4 },
+                { t: "Menyarankan agar bantuan tersebut disalurkan saja melalui kotak amal masjid lingkungan sekitar.", s: 3 },
+                { t: "Menerima amplop tersebut sementara waktu untuk kemudian diserahkan kepada komandan regu di markas.", s: 2 },
+                { t: "Menerima pemberian tersebut untuk kas konsumsi regu patroli karena dianggap sebagai bentuk apresiasi sukarela warga.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Menolak gratifikasi yang disertai maksud melonggarkan pengawasan demi menjaga integritas dan objektivitas tugas.",
+                diuji: "Integritas, kepatuhan pada aturan anti-gratifikasi, dan kemampuan menahan godaan materi.",
+                s5: "Menolak tegas namun santun, menegaskan prinsip pelayanan tanpa pamrih, serta menjaga konsistensi patroli menutup seluruh celah kompromi integritas.",
+                s4: "Menolak dan segera pergi sudah menjaga diri dari gratifikasi, ditambah penegasan jadwal patroli akan lebih memperjelas batas profesional.",
+                s3: "Mengarahkan penyaluran uang dari pihak yang meminta kelonggaran patroli tetap berpotensi menimbulkan kesan kompromi.",
+                s2: "Menerima terlebih dahulu di lapangan berisiko menimbulkan salah tafsir dan bukti penerimaan yang tidak perlu.",
+                s1: "Menerima uang dengan alasan kas regu tetap merupakan pelanggaran integritas dan gratifikasi.",
+                pelajaran: "Integritas tidak mengenal istilah uang terima kasih; setiap pemberian yang terkait tugas harus ditolak di tempat dengan bermartabat."
+            }
+        },
+        {
+            id: 21,
+            dimensi: "Pengendalian Diri",
+            kriteria: "Sabar dan disiplin",
+            kesulitan: "Sedang",
+            q: "Anda bertugas sebagai operator layanan pengaduan telepon. Sepanjang pagi hingga siang, Anda menerima puluhan panggilan beruntun, termasuk beberapa penelepon yang berbicara berbelit-belit dan mengulang pertanyaan yang sama berkali-kali. Kondisi Anda mulai lelah dan jenuh. Langkah Anda adalah...",
+            opts: [
+                { t: "Mengatur napas sejenak di antara panggilan, tetap menyimak setiap penelepon dengan sabar, dan merangkum inti kebutuhan mereka dengan bahasa yang ramah serta jelas.", s: 5 },
+                { t: "Mengarahkan penelepon agar langsung menyebutkan inti keperluan sejak awal percakapan supaya antrean telepon cepat terlayani.", s: 4 },
+                { t: "Menjawab pertanyaan penelepon dengan kalimat singkat dan nada datar agar energi suara Anda tidak cepat habis.", s: 3 },
+                { t: "Meminta izin menutup telepon lebih cepat apabila penelepon mulai mengulang pertanyaan yang sudah pernah dijawab.", s: 2 },
+                { t: "Menonaktifkan sementara saluran telepon beberapa menit tanpa izin supervisor untuk beristirahat sejenak.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Menjaga kualitas kesabaran dan keramahan komunikasi di bawah tekanan kelelahan layanan berulang.",
+                diuji: "Kesabaran, pengendalian rasa jenuh, dan konsistensi mutu pelayanan.",
+                s5: "Mengelola jeda napas, tetap mendengarkan dengan sabar, dan membantu penelepon merangkum kebutuhannya menjaga kualitas layanan tetap prima meski lelah.",
+                s4: "Mengarahkan ke inti persoalan membantu efisiensi, tetapi harus tetap disampaikan dengan nada empatik agar tidak terkesan memotong pembicaraan.",
+                s3: "Nada datar akibat lelah sering ditangkap penelepon sebagai sikap dingin atau tidak peduli.",
+                s2: "Memutus percakapan sebelum penelepon memahami jawaban berisiko memicu keluhan berulang.",
+                s1: "Mematikan saluran layanan tanpa izin melanggar disiplin operasional layanan publik.",
+                pelajaran: "Kesabaran profesional adalah kemampuan menjaga kualitas pelayanan pada penelepon ke-50 tetap sebaik penelepon pertama."
+            }
+        },
+        {
+            id: 22,
+            dimensi: "Pengendalian Diri",
+            kriteria: "Jujur, patuh pada aturan, dan setia pada organisasi",
+            kesulitan: "Sulit",
+            q: "Saat menyusun rekapitulasi absensi kehadiran latihan fisik rutin untuk dilaporkan ke bagian pembinaan, Anda melihat salah satu sahabat dekat Anda terlambat hadir lebih dari 30 menit sebanyak tiga kali minggu ini. Ia meminta Anda menuliskan status hadir tepat waktu agar penilaian kedisiplinannya tidak berkurang. Tindakan Anda adalah...",
+            opts: [
+                { t: "Menolak permintaan tersebut secara jujur dan baik-baik, mencatat kehadiran sesuai jam kedatangan sebenarnya, serta menyemangatinya memperbaiki manajemen waktu ke depan.", s: 5 },
+                { t: "Mencatat jam kedatangan sebenarnya pada lembar absensi tanpa banyak berdebat agar data tetap akurat.", s: 4 },
+                { t: "Menuliskan status hadir dengan catatan keterangan terlambat di kolom tambahan sebagai jalan tengah.", s: 3 },
+                { t: "Mengubah satu kali keterlambatannya menjadi tepat waktu sebagai bentuk toleransi terakhir kali.", s: 2 },
+                { t: "Memenuhi permintaannya karena merasa persahabatan dan solidaritas antarsesama peserta lebih utama.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Menegakkan kejujuran pencatatan administrasi di hadapan tekanan emosional persahabatan.",
+                diuji: "Kejujuran tanpa kompromi, kepatuhan pada aturan pencatatan, dan keteguhan menolak manipulasi.",
+                s5: "Menolak dengan santun, mencatat fakta apa adanya, serta memberi dukungan positif agar sahabat memperbaiki kedisiplinan mencerminkan integritas sekaligus kepedulian sejati.",
+                s4: "Mencatat sesuai fakta sudah menjaga integritas data, dan komunikasi yang konstruktif akan menjaga hubungan tetap sehat.",
+                s3: "Mencatat hadir lalu menambah catatan terlambat tetap mengaburkan status ketepatan waktu yang menjadi indikator penilaian.",
+                s2: "Toleransi satu kali manipulasi tetap merupakan pemalsuan data resmi.",
+                s1: "Mengorbankan kejujuran demi solidaritas semu merusak integritas pribadi maupun organisasi.",
+                pelajaran: "Sahabat yang baik tidak membantu menutupi ketidakdisiplinan dengan kebohongan, melainkan jujur pada aturan dan mendorong perbaikan."
+            }
+        },
+        {
+            id: 23,
+            dimensi: "Pengendalian Diri",
+            kriteria: "Sabar, jujur, dan patuh pada aturan",
+            kesulitan: "Sulit",
+            q: "Dalam sebuah kegiatan pengamanan unjuk rasa damai mahasiswa di depan gedung kantor pemerintahan, salah satu orator menggunakan pengeras suara untuk melontarkan sindiran keras yang ditujukan langsung kepada barisan petugas penjaga, termasuk menyebut fisik dan sikap Anda secara pribadi. Reaksi Anda adalah...",
+            opts: [
+                { t: "Tetap mempertahankan sikap siaga yang tenang, fokus pada tugas pengamanan sesuai komando, dan tidak terpancing melakukan gerakan maupun ucapan balasan.", s: 5 },
+                { t: "Menarik napas dalam-dalam untuk meredam emosi sambil sesekali mengingatkan rekan di sebelah Anda agar tetap tenang.", s: 4 },
+                { t: "Menatap tajam ke arah orator tersebut sebagai isyarat peringatan bahwa ucapannya sudah melewati batas kesopanan.", s: 3 },
+                { t: "Berbisik kepada rekan barisan untuk mencemooh balik saat orator tersebut melakukan kesalahan bicara.", s: 2 },
+                { t: "Melangkah maju keluar dari barisan untuk menegur orator secara langsung agar tidak menghina petugas.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Pengendalian diri tingkat tinggi menghadapi provokasi verbal terbuka di tengah situasi massa yang sensitif.",
+                diuji: "Kemampuan menahan impuls, ketahanan terhadap provokasi, dan kepatuhan pada garis komando pengamanan.",
+                s5: "Tetap teguh pada formasi, mengendalikan emosi pribadi, dan mematuhi komando menjaga stabilitas pengamanan serta mencegah eskalasi massa.",
+                s4: "Mengendalikan diri dan menenangkan rekan sudah baik, namun tetap harus menjaga fokus penuh pada sektor pengawasan.",
+                s3: "Tatapan tajam yang menantang berisiko ditafsirkan massa sebagai provokasi balik dari aparat.",
+                s2: "Mencemooh dari dalam barisan menurunkan profesionalisme dan merusak disiplin formasi.",
+                s1: "Keluar barisan tanpa perintah untuk membalas orator melanggar disiplin komando dan memicu bentrokan.",
+                pelajaran: "Dalam pengamanan massa, kendali emosi setiap individu petugas adalah benteng utama yang mencegah provokasi berubah menjadi kericuhan."
+            }
+        },
+        {
+            id: 24,
+            dimensi: "Penyesuaian Diri",
+            kriteria: "Disiplin dan setia pada organisasi",
+            kesulitan: "Mudah",
+            q: "Selama ini Anda terbiasa bekerja menyusun laporan secara individu dengan jadwal kerja yang teratur. Pada bulan ini, Anda ditempatkan dalam tim satuan tugas lapangan yang menuntut koordinasi lisan cepat, pembagian tugas dinamis setiap pagi, dan mobilitas tinggi. Sikap Anda adalah...",
+            opts: [
+                { t: "Menyesuaikan pola kerja menjadi lebih komunikatif dan sigap mengikuti briefing pagi agar selaras dengan ritme tim lapangan.", s: 5 },
+                { t: "Berusaha mengikuti pembagian tugas harian tim sambil tetap membuat catatan pribadi agar tidak tertinggal informasi.", s: 4 },
+                { t: "Meminta ketua tim memberikan rincian tugas tertulis setiap hari karena Anda lebih nyaman bekerja dengan panduan tertulis.", s: 3 },
+                { t: "Bekerja sesuai urutan yang biasa Anda lakukan di unit lama meskipun ritmenya lebih lambat dari rekan tim lainnya.", s: 2 },
+                { t: "Merasa kurang cocok dengan pola kerja lapangan dan berharap segera dipindahkan kembali ke bagian administrasi.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Menyesuaikan gaya kerja dari pola individual yang statis menuju kerja tim lapangan yang dinamis.",
+                diuji: "Fleksibilitas gaya kerja, kemampuan bekerja dalam lingkungan baru, dan kesiapan berkolaborasi.",
+                s5: "Mengubah kebiasaan komunikasi menjadi lebih aktif dan menyelaraskan ritme dengan briefing pagi memastikan Anda cepat menyatu dalam tim lapangan.",
+                s4: "Membuat catatan pribadi untuk membantu adaptasi sudah baik, selama tidak menghambat kecepatan respons di lapangan.",
+                s3: "Menuntut format tertulis di situasi lapangan yang dinamis menunjukkan masih kaku terhadap cara kerja baru.",
+                s2: "Mempertahankan ritme lama di lingkungan cepat menghambat sinkronisasi tim.",
+                s1: "Menolak beradaptasi sejak awal menghambat perkembangan kapasitas diri.",
+                pelajaran: "Adaptasi kerja berarti menyesuaikan cara kita berkomunikasi dan bergerak dengan kebutuhan medan tugas saat ini."
+            }
+        },
+        {
+            id: 25,
+            dimensi: "Penyesuaian Diri",
+            kriteria: "Sabar dan patuh pada aturan",
+            kesulitan: "Mudah",
+            q: "Setelah Anda menyampaikan simulasi pelayanan masyarakat di hadapan pembina dan rekan kelompok, pembina memberikan kritik bahwa intonasi suara Anda terlalu datar dan ekspresi wajah kurang ramah sehingga terkesan kaku. Reaksi Anda adalah...",
+            opts: [
+                { t: "Berterima kasih atas masukan tersebut, mencatat aspek intonasi dan ekspresi yang perlu diperbaiki, serta langsung melatihnya pada sesi berikutnya.", s: 5 },
+                { t: "Menerima kritik tersebut dengan tenang dan berusaha tersenyum lebih sering saat berhadapan dengan warga.", s: 4 },
+                { t: "Menjelaskan kepada pembina bahwa karakter pembawaan Anda memang serius sejak dulu meskipun tidak bermaksud judes.", s: 3 },
+                { t: "Merasa malu di depan rekan kelompok sehingga menjadi pendiam dan ragu saat mendapat giliran praktik berikutnya.", s: 2 },
+                { t: "Menganggap kritik tersebut tidak terlalu penting selama prosedur pelayanan yang dijalankan sudah benar.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Menerima umpan balik mengenai gaya komunikasi interpersonal dan menjadikannya bahan perbaikan perilaku nyata.",
+                diuji: "Kemampuan menerima kritik dan masukan serta penyesuaian perilaku pelayanan.",
+                s5: "Mengapresiasi masukan, memetakan perbaikan spesifik, dan segera mempraktikkannya menunjukkan sikap terbuka dan cepat bertumbuh.",
+                s4: "Menerima kritik dengan baik dan mencoba memperbaiki ekspresi sudah positif, meski perlu latihan intonasi yang lebih menyeluruh.",
+                s3: "Membela diri dengan alasan karakter bawaan menghambat perubahan sikap yang dibutuhkan dalam pelayanan publik.",
+                s2: "Menjadi minder akibat kritik menghambat proses belajar bersama.",
+                s1: "Meremehkan aspek keramahan dalam pelayanan mengabaikan kebutuhan psikologis masyarakat yang dilayani.",
+                pelajaran: "Kritik terhadap pembawaan diri adalah cermin berharga; semakin cepat kita menyesuaikan gaya komunikasi, semakin mudah masyarakat menerima kehadiran kita."
+            }
+        },
+        {
+            id: 26,
+            dimensi: "Penyesuaian Diri",
+            kriteria: "Setia pada organisasi dan patuh pada aturan",
+            kesulitan: "Mudah",
+            q: "Organisasi memperbarui sistem pengajuan cuti, izin, dan laporan kegiatan harian dari pengisian formulir kertas menjadi aplikasi daring terintegrasi. Sebagian rekan senior mengeluh karena harus menginput data melalui ponsel setiap selesai tugas. Sikap Anda adalah...",
+            opts: [
+                { t: "Segera mengunduh dan membiasakan diri mengisi laporan melalui aplikasi sesuai ketentuan baru, serta membantu rekan senior yang kesulitan mengoperasikannya.", s: 5 },
+                { t: "Menggunakan aplikasi daring tersebut secara tertib untuk seluruh keperluan administrasi pribadi Anda sesuai jadwal.", s: 4 },
+                { t: "Mengisi aplikasi hanya jika diingatkan oleh bagian administrasi sambil tetap menyerahkan formulir kertas.", s: 3 },
+                { t: "Menunda penggunaan aplikasi sampai formulir kertas benar-benar ditarik dan tidak lagi diterima kantor.", s: 2 },
+                { t: "Ikut mengeluhkan perubahan sistem tersebut karena dianggap menambah beban kerja setelah tugas lapangan.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Kesiapan menerima digitalisasi prosedur internal dan membantu lingkungan kerja beradaptasi.",
+                diuji: "Kemampuan menerima perubahan sistem, kepatuhan, dan dukungan terhadap modernisasi organisasi.",
+                s5: "Langsung beradaptasi secara disiplin sekaligus membantu rekan senior mengatasi kendala teknis mempercepat transisi organisasi secara harmonis.",
+                s4: "Tertib menjalankan sistem baru secara mandiri sudah baik dan mencerminkan kepatuhan.",
+                s3: "Kepatuhan yang harus selalu diingatkan menunjukkan belum tumbuhnya kesadaran beradaptasi.",
+                s2: "Menunda hingga terpaksa mencerminkan resistensi pasif terhadap pembaruan.",
+                s1: "Ikut menyebarkan keluhan memperkuat hambatan perubahan di dalam satuan.",
+                pelajaran: "Ketika organisasi memperbarui sistem demi akuntabilitas, anggota yang adaptif segera menyesuaikan diri dan membantu rekan di sekitarnya."
+            }
+        },
+        {
+            id: 27,
+            dimensi: "Penyesuaian Diri",
+            kriteria: "Jiwa sosial tinggi dan setia pada organisasi",
+            kesulitan: "Sedang",
+            q: "Anda ditugaskan dalam kegiatan pengamanan dan pendampingan masyarakat di wilayah pedesaan yang memiliki tradisi musyawarah adat sebelum setiap kegiatan luar masuk ke desa. Jadwal sosialisasi tim Anda sedikit bergeser karena harus mengikuti prosesi penyambutan adat setempat. Sikap Anda adalah...",
+            opts: [
+                { t: "Mengikuti prosesi musyawarah adat dengan penuh hormat, menyesuaikan susunan waktu sosialisasi secara efektif, dan menyampaikan tujuan kegiatan dengan bahasa yang menghargai budaya lokal.", s: 5 },
+                { t: "Menghadiri musyawarah adat bersama pimpinan tim sambil menunggu giliran waktu yang diberikan oleh tokoh desa.", s: 4 },
+                { t: "Meminta panitia desa mempersingkat acara adat agar jadwal sosialisasi tim tidak bergeser terlalu jauh.", s: 3 },
+                { t: "Menunggu di luar balai desa karena merasa prosesi adat memakan waktu terlalu lama dari rencana awal.", s: 2 },
+                { t: "Menunjukkan raut wajah tidak sabar dan berkali-kali melihat jam tangan di hadapan para tokoh desa.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Menghormati tata krama budaya masyarakat setempat dan menyesuaikan jadwal kegiatan lapangan secara luwes.",
+                diuji: "Kemampuan menempatkan diri sesuai situasi budaya, kesabaran sosial, dan fleksibilitas lapangan.",
+                s5: "Menghargai prosesi adat dengan tulus sambil mengefektifkan durasi penyampaian materi membangun kepercayaan masyarakat sejak awal.",
+                s4: "Hadir menghormati acara sudah baik, ditambah penyesuaian penyampaian materi akan membuat kegiatan tetap tepat sasaran.",
+                s3: "Meminta pemangkasan acara adat terkesan kurang menghormati kearifan lokal tuan rumah.",
+                s2: "Menjauh dari forum masyarakat menciptakan jarak psikologis antara petugas dan warga.",
+                s1: "Menunjukkan ketidaksabaran di depan tokoh masyarakat merusak citra kesantunan institusi.",
+                pelajaran: "Keberhasilan tugas di tengah masyarakat sangat ditentukan oleh kemampuan menyesuaikan diri dengan adat dan tata krama setempat."
+            }
+        },
+        {
+            id: 28,
+            dimensi: "Penyesuaian Diri",
+            kriteria: "Patuh pada aturan dan disiplin",
+            kesulitan: "Sulit",
+            q: "Saat menjalankan tugas pengawasan pada turnamen olahraga antar-pelajar, suasana di tribun penonton sangat meriah dan beberapa panitia muda mengajak Anda ikut berjoget dan membuat video konten hiburan bersama peserta di tengah lapangan saat jeda pertandingan. Padahal Anda sedang mengenakan pakaian dinas lengkap. Apa yang Anda lakukan?",
+            opts: [
+                { t: "Menyapa mereka dengan ramah dan penuh semangat, namun menolak secara santun untuk ikut berjoget atau membuat video hiburan karena sedang mengenakan seragam dinas dan menjalankan tugas pengawasan.", s: 5 },
+                { t: "Tersenyum dan melambaikan tangan ke arah kamera secara singkat dari pinggir lapangan tanpa meninggalkan posisi pengawasan.", s: 4 },
+                { t: "Menolak ajakan tersebut dengan wajah datar dan meminta panitia segera kembali ke tempat duduk masing-masing.", s: 3 },
+                { t: "Ikut berjoget sebentar demi terlihat akrab dan tidak dianggap kaku oleh kalangan pelajar.", s: 2 },
+                { t: "Melepas topi dinas sementara waktu agar bisa ikut membuat video hiburan bersama panitia turnamen.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Menempatkan diri secara hangat dan bersahabat di tengah kalangan muda tanpa menurunkan wibawa seragam dinas.",
+                diuji: "Kemampuan menempatkan diri sesuai situasi dan fleksibilitas yang tetap berlandaskan aturan etika dinas.",
+                s5: "Bersikap ramah dan apresiatif namun tetap menjaga batas kehormatan seragam serta fokus pengawasan menunjukkan kedewasaan menempatkan diri.",
+                s4: "Lambaian singkat dari posisi jaga masih menjaga batas tugas, meski penjelasan santun lebih menegaskan profesionalisme.",
+                s3: "Penolakan yang terlalu dingin membuat jarak kaku yang tidak perlu dengan generasi muda.",
+                s2: "Berjoget dalam seragam dinas saat bertugas pengamanan menurunkan wibawa dan kewaspadaan.",
+                s1: "Melepas atribut dinas di tengah tugas demi konten hiburan melanggar disiplin seragam dan prosedur pengawasan.",
+                pelajaran: "Ramah kepada masyarakat tidak berarti melupakan batas peran; petugas yang matang mampu akrab tanpa kehilangan kehormatan seragam."
+            }
+        },
+        {
+            id: 29,
+            dimensi: "Penyesuaian Diri",
+            kriteria: "Setia pada organisasi, jujur, dan patuh pada aturan",
+            kesulitan: "Sulit",
+            q: "Karena adanya kebutuhan mendesak penguatan personel di bidang pelayanan pengaduan masyarakat, jadwal rotasi internal mempercepat pemindahan Anda ke unit baru tepat saat Anda baru saja merapikan sistem arsip di unit lama. Rekan-rekan di unit lama juga masih membutuhkan bantuan Anda. Sikap Anda adalah...",
+            opts: [
+                { t: "Menerima keputusan rotasi dengan loyal, menyusun panduan singkat serah terima arsip agar mudah dilanjutkan rekan unit lama, dan segera beradaptasi di unit baru.", s: 5 },
+                { t: "Melaksanakan kepindahan sesuai tanggal surat perintah dan siap menjawab pertanyaan rekan unit lama apabila dihubungi di luar jam sibuk.", s: 4 },
+                { t: "Meminta penundaan perpindahan selama dua minggu kepada pimpinan dengan alasan pekerjaan arsip di unit lama belum tuntas.", s: 3 },
+                { t: "Menjalani tugas di unit baru secara pasif sambil tetap lebih sering menghabiskan waktu membantu di ruangan unit lama.", s: 2 },
+                { t: "Mengeluhkan kebijakan rotasi yang dianggap terlalu mendadak dan tidak mempertimbangkan kenyamanan kerja anggota.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Kesiapan menerima rotasi mendadak dengan menyelesaikan transisi secara bertanggung jawab dan langsung fokus pada tugas baru.",
+                diuji: "Loyalitas pada organisasi, kemampuan menerima perubahan penempatan, dan ketuntasan transisi kerja.",
+                s5: "Menerima perintah dengan ikhlas, meninggalkan panduan serah terima yang rapi bagi unit lama, dan langsung tancap gas di unit baru mencerminkan profesionalisme tinggi.",
+                s4: "Mematuhi jadwal perintah dan tetap membuka komunikasi teknis sudah baik, ditambah dokumen serah terima tertulis akan lebih sistematis.",
+                s3: "Meminta penundaan tanpa alasan darurat menunjukkan keterikatan berlebihan pada zona nyaman lama.",
+                s2: "Berada di unit baru tetapi fokus masih tertinggal di unit lama menghambat kinerja kedua unit.",
+                s1: "Mengeluhkan keputusan organisasi merusak mental kesiapan tugas.",
+                pelajaran: "Profesional sejati meninggalkan tempat lama dalam keadaan tertib dan memasuki tempat baru dengan kesiapan penuh."
+            }
+        },
+        {
+            id: 30,
+            dimensi: "Penyesuaian Diri",
+            kriteria: "Setia pada organisasi, patuh pada aturan, dan jujur",
+            kesulitan: "Sulit",
+            q: "Dalam kegiatan pengamanan jalur distribusi logistik pemilu atau agenda publik berskala besar, cuaca buruk menyebabkan rute utama terputus longsor sehingga komando lapangan mengalihkan jalur pengawalan melalui jalan desa yang sempit dan padat aktivitas warga. Situasi menuntut kecepatan koordinasi sekaligus kehati-hatian tinggi agar tidak menimbulkan kepanikan warga. Tindakan Anda adalah...",
+            opts: [
+                { t: "Segera menyesuaikan formasi pengawalan dengan kondisi jalan desa, menurunkan kecepatan secara terukur, serta berkoordinasi dengan perangkat desa setempat untuk membantu memberi imbauan ramah kepada warga.", s: 5 },
+                { t: "Mengikuti pengalihan rute sesuai perintah komando dengan terus membunyikan sirene peringatan agar warga segera menyingkir dari tepi jalan.", s: 4 },
+                { t: "Menghentikan iring-iringan di mulut jalan desa untuk menunggu bantuan personel tambahan sebelum melintas.", s: 3 },
+                { t: "Tetap mencoba melintasi tepian jalur utama yang terkena longsor agar tidak perlu beradaptasi dengan jalan desa yang sempit.", s: 2 },
+                { t: "Menunda keberangkatan pengawalan sampai alat berat selesai membersihkan jalur utama meskipun memakan waktu berjam-jam.", s: 1 }
+            ],
+            pembahasan: {
+                inti: "Adaptasi taktis di lapangan ketika situasi alam memaksa perubahan rute tanpa mengorbankan keselamatan dan ketenangan warga.",
+                diuji: "Kemampuan menempatkan diri sesuai situasi darurat, fleksibilitas berbasis prosedur, dan kepekaan terhadap lingkungan sosial.",
+                s5: "Menyesuaikan kecepatan formasi dan menggandeng perangkat desa untuk komunikasi yang menenangkan memastikan logistik tetap bergerak aman tanpa memicu kepanikan warga.",
+                s4: "Mematuhi rute pengalihan sudah tepat, tetapi penggunaan sirene berlebihan di jalan desa sempit justru dapat mengejutkan dan membuat warga panik.",
+                s3: "Berhenti terlalu lama tanpa langkah koordinasi lokal menghambat ketepatan waktu distribusi penting.",
+                s2: "Memaksakan melintasi area longsor membahayakan keselamatan personel dan muatan logistik.",
+                s1: "Menunda berjam-jam saat jalur alternatif tersedia menunjukkan rendahnya daya adaptasi operasional.",
+                pelajaran: "Penyesuaian diri terbaik memadukan kelincahan mengikuti perubahan medan dengan kepekaan menjaga ketenangan masyarakat sekitar."
+            }
+        }
+    ];
+
+    function generateSessionId() {
+        const now = new Date();
+        const pad = n => String(n).padStart(2, '0');
+        const ts = `${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+        const rnd = Math.floor(100 + Math.random() * 900);
+        return `PRC-TKP2-${ts}-${rnd}`;
+    }
+
+    function formatDateID(d) {
+        const pad = n => String(n).padStart(2, '0');
+        return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`;
+    }
+
+    function formatTimeID(d) {
+        const pad = n => String(n).padStart(2, '0');
+        return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    }
+
+    function formatDurationID(ms) {
+        const totalSec = Math.max(1, Math.floor(ms / 1000));
+        const m = Math.floor(totalSec / 60);
+        const s = totalSec % 60;
+        return `${m} Menit ${s} Detik`;
+    }
+
+    function shuffleOptionsBalanced(dataList) {
+        return dataList.map((item) => {
+            const clonedOpts = item.opts.map(o => ({ ...o }));
+            for (let i = clonedOpts.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                const tmp = clonedOpts[i];
+                clonedOpts[i] = clonedOpts[j];
+                clonedOpts[j] = tmp;
+            }
+            return {
+                ...item,
+                opts: clonedOpts
+            };
+        });
+    }
+
+    function handleLoginSubmit(event) {
+        event.preventDefault();
+        const nameInput = document.getElementById('pName').value.trim();
+        if (nameInput.length < 3) {
+            alert("Isi nama lengkap peserta minimal 3 karakter.");
+            return;
+        }
+        pName = nameInput;
+        sessionId = generateSessionId();
+        startTimeObj = new Date();
+        questions = shuffleOptionsBalanced(rawData);
+        userSelections = {};
+        currentIdx = 0;
+
+        document.getElementById('peserta-badge').innerText = `Peserta: ${pName.toUpperCase()}`;
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('exam-container').style.display = 'flex';
+        render();
+    }
+
+    function render() {
+        const q = questions[currentIdx];
+        document.getElementById('q-text').innerText = `${currentIdx + 1}. ${q.q}`;
+        let h = "";
+        q.opts.forEach((o, i) => {
+            const sel = userSelections[currentIdx] && userSelections[currentIdx].optIndex === i ? 'selected' : '';
+            const letter = String.fromCharCode(65 + i);
+            h += `<div class="option ${sel}" onclick="pick(${i})">
+                <b style="margin-right:10px;">${letter}.</b> <span>${o.t}</span>
+            </div>`;
+        });
+        document.getElementById('options').innerHTML = h;
+        updateNav();
+    }
+
+    function pick(optIndex) {
+        const chosen = questions[currentIdx].opts[optIndex];
+        userSelections[currentIdx] = {
+            optIndex: optIndex,
+            letter: String.fromCharCode(65 + optIndex),
+            t: chosen.t,
+            s: chosen.s
+        };
+        render();
+        setTimeout(() => {
+            if (currentIdx < TOTAL_SOAL - 1) {
+                currentIdx++;
+                render();
+                window.scrollTo(0, 0);
+            }
+        }, 200);
+    }
+
+    function updateNav() {
+        let h = "";
+        let answeredCount = 0;
+        for (let i = 0; i < TOTAL_SOAL; i++) {
+            if (userSelections[i]) answeredCount++;
+            const cls = currentIdx === i ? 'current' : (userSelections[i] ? 'filled' : '');
+            h += `<div class="nav-dot ${cls}" onclick="goTo(${i})">${i + 1}</div>`;
+        }
+        document.getElementById('nav-grid').innerHTML = h;
+        document.getElementById('progress-badge').innerText = `Terjawab: ${answeredCount} / ${TOTAL_SOAL}`;
+    }
+
+    function goTo(i) { currentIdx = i; render(); }
+    function prevQ() { if (currentIdx > 0) { currentIdx--; render(); } }
+    function nextQ() { if (currentIdx < TOTAL_SOAL - 1) { currentIdx++; render(); } }
+
+    async function sendResultToMaster(payload) {
+        const statusEl = document.getElementById('sync-status');
+        statusEl.className = "sync-banner sync-loading";
+        statusEl.innerText = "Mengirim dan menyimpan hasil TKP Seri 2 ke database MASTER PRC...";
+
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            const rawText = await response.text();
+            let parsed = null;
+            try {
+                parsed = JSON.parse(rawText);
+            } catch (e) {
+                parsed = { raw: rawText };
+            }
+
+            if (parsed && (parsed.status === "error" || parsed.result === "error")) {
+                throw new Error(parsed.message || "Server mengembalikan status error");
+            }
+
+            isSubmitted = true;
+            statusEl.className = "sync-banner sync-ok";
+            statusEl.innerText = `Hasil berhasil tersimpan ke database MASTER PRC (Session ID: ${payload.sessionId}).`;
+        } catch (err) {
+            isSubmitting = false;
+            statusEl.className = "sync-banner sync-err";
+            statusEl.innerHTML = `Gagal mengirim hasil ke server (${err.message}). <button type="button" onclick="retrySubmit()" style="margin-left:10px; padding:5px 12px; background:#c0392b; color:white; border:none; border-radius:4px; cursor:pointer; font-weight:bold;">Kirim Ulang</button>`;
+        }
+    }
+
+    let lastPayload = null;
+    function retrySubmit() {
+        if (!lastPayload || isSubmitting || isSubmitted) return;
+        isSubmitting = true;
+        sendResultToMaster(lastPayload);
+    }
+
+    function triggerFileDownload(blob, filename) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function downloadRingkasanCSV() {
+        if (!finalReportData) return;
+        const { payload, rows } = finalReportData;
+        const lines = [];
+        lines.push(["PERSONA RESEARCH & CONSULTING — REKAP HASIL TKP SERI 2"]);
+        lines.push(["Nama Peserta", payload.namaSiswa]);
+        lines.push(["Session ID", payload.sessionId]);
+        lines.push(["Tanggal", payload.tanggal]);
+        lines.push(["Durasi", payload.durasi]);
+        lines.push(["Total Poin TKP", `${payload.tkp} / 150`]);
+        lines.push(["Nilai Akhir", payload.nilaiAkhir]);
+        lines.push(["Skor Prososial", `${payload.prososial} / 40`]);
+        lines.push(["Skor Kepercayaan Diri", `${payload.kepercayaanDiri} / 35`]);
+        lines.push(["Skor Pengendalian Diri", `${payload.pengendalianDiri} / 40`]);
+        lines.push(["Skor Penyesuaian Diri", `${payload.penyesuaianDiri} / 35`]);
+        lines.push([]);
+        lines.push(["No", "Dimensi", "Kriteria", "Soal", "Huruf Dipilih", "Jawaban Dipilih", "Skor Diperoleh", "Jawaban Skor 5 Terbaik", "Inti Pembahasan"]);
+
+        rows.forEach(r => {
+            lines.push([
+                r.no,
+                r.dimensi,
+                r.kriteria,
+                r.soal,
+                r.pickedLetter,
+                r.pickedText,
+                r.pickedScore,
+                r.bestText,
+                r.inti
+            ]);
+        });
+
+        const csvString = "\uFEFF" + lines.map(row =>
+            row.map(cell => `"${String(cell ?? "").replace(/"/g, '""')}"`).join(",")
+        ).join("\r\n");
+
+        const safeName = payload.namaSiswa.replace(/[^a-zA-Z0-9_-]/g, "_");
+        const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+        triggerFileDownload(blob, `Rekap_Jawaban_TKP_Seri2_${safeName}.csv`);
+    }
+
+    function downloadPembahasanHTML() {
+        if (!finalReportData) return;
+        const { payload, reviewHtml } = finalReportData;
+        const docHtml = `<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Pembahasan Lengkap TKP Seri 2 - ${payload.namaSiswa}</title>
+<style>
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #faf7f2; color: #1f2937; margin: 0; padding: 24px; line-height: 1.6; }
+    .wrap { max-width: 860px; margin: 0 auto; background: #ffffff; padding: 32px; border-radius: 10px; box-shadow: 0 2px 12px rgba(15,28,63,0.08); }
+    .hdr { background: #0f1c3f; color: #faf7f2; padding: 22px; border-radius: 8px; border-bottom: 4px solid #b85d79; margin-bottom: 22px; }
+    .hdr h1 { margin: 0 0 6px 0; font-size: 1.35rem; }
+    .hdr p { margin: 0; font-size: 0.9rem; color: #e2b8c6; }
+    .meta-table { width: 100%; border-collapse: collapse; margin-bottom: 22px; font-size: 0.92rem; }
+    .meta-table td { padding: 8px 12px; border: 1px solid #e5e7eb; }
+    .meta-table td.lbl { background: #f3f4f6; font-weight: 700; width: 28%; color: #0f1c3f; }
+    .review-card { background: #fff; padding: 20px; margin-bottom: 18px; border-radius: 8px; border: 1px solid #e5e7eb; border-left: 6px solid #b85d79; }
+    .badge-dim { display: inline-block; background: #0f1c3f; color: #faf7f2; padding: 4px 10px; border-radius: 4px; font-size: 0.78rem; font-weight: 700; margin-bottom: 10px; }
+    .review-opt { padding: 8px 12px; margin: 5px 0; border-radius: 6px; background: #f9fafb; border: 1px solid #e5e7eb; font-size: 0.92rem; }
+    .review-opt.user-picked { border: 2px solid #0f1c3f; background: #eef2ff; }
+    .review-opt.best-opt { border-left: 4px solid #1e8449; }
+    .pembahasan-box { margin-top: 12px; font-size: 0.92rem; background: #faf7f2; padding: 14px; border-radius: 6px; border: 1px solid #ece3e6; }
+    .pembahasan-box p { margin: 0 0 8px 0; }
+    .pembahasan-box p:last-child { margin-bottom: 0; }
+    @media print { body { background: #fff; padding: 0; } .wrap { box-shadow: none; padding: 10px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+    <div class="hdr">
+        <h1>PERSONA RESEARCH & CONSULTING — ARSIP SOAL, JAWABAN & PEMBAHASAN</h1>
+        <p>Instrumen Latihan Tes Kepribadian (TKP) Seri 2 — Persiapan Seleksi POLRI</p>
+    </div>
+    <table class="meta-table">
+        <tr><td class="lbl">Nama Peserta</td><td>${payload.namaSiswa}</td><td class="lbl">Tanggal & Durasi</td><td>${payload.tanggal} (${payload.durasi})</td></tr>
+        <tr><td class="lbl">Session ID</td><td>${payload.sessionId}</td><td class="lbl">Total Poin / Nilai</td><td><b>${payload.tkp} / 150</b> (Nilai: <b>${payload.nilaiAkhir}</b>)</td></tr>
+        <tr><td class="lbl">Prososial (8 Soal)</td><td>${payload.prososial} / 40</td><td class="lbl">Kepercayaan Diri (7 Soal)</td><td>${payload.kepercayaanDiri} / 35</td></tr>
+        <tr><td class="lbl">Pengendalian Diri (8 Soal)</td><td>${payload.pengendalianDiri} / 40</td><td class="lbl">Penyesuaian Diri (7 Soal)</td><td>${payload.penyesuaianDiri} / 35</td></tr>
+    </table>
+    ${reviewHtml}
+</div>
+</body>
+</html>`;
+
+        const safeName = payload.namaSiswa.replace(/[^a-zA-Z0-9_-]/g, "_");
+        const blob = new Blob([docHtml], { type: "text/html;charset=utf-8;" });
+        triggerFileDownload(blob, `Pembahasan_Lengkap_TKP_Seri2_${safeName}.html`);
+    }
+
+    function finalize() {
+        if (isSubmitting || isSubmitted) return;
+
+        const answeredCount = Object.keys(userSelections).length;
+        if (answeredCount < TOTAL_SOAL) {
+            const belum = TOTAL_SOAL - answeredCount;
+            if (!confirm(`Masih ada ${belum} soal yang belum dijawab (skor 0). Tetap selesaikan dan kirim jawaban sekarang?`)) {
+                return;
+            }
+        } else {
+            if (!confirm("Kirim jawaban TKP Seri 2 sekarang?")) return;
+        }
+
+        isSubmitting = true;
+        const finishBtn = document.getElementById('btn-finish');
+        if (finishBtn) {
+            finishBtn.disabled = true;
+            finishBtn.innerText = "MEMPROSES...";
+        }
+
+        const endTimeObj = new Date();
+        let total = 0;
+        const dimScores = {
+            "Prososial": { score: 0, max: 40 },
+            "Kepercayaan Diri": { score: 0, max: 35 },
+            "Pengendalian Diri": { score: 0, max: 40 },
+            "Penyesuaian Diri": { score: 0, max: 35 }
+        };
+
+        const jawabanList = [];
+        const skorPerSoal = [];
+        const exportRows = [];
+        let h = "";
+
+        questions.forEach((q, i) => {
+            const picked = userSelections[i] || { letter: "-", t: "(Tidak dijawab)", s: 0 };
+            total += picked.s;
+            if (dimScores[q.dimensi]) {
+                dimScores[q.dimensi].score += picked.s;
+            }
+            jawabanList.push(`${i + 1}:${picked.letter}(${picked.s})`);
+            skorPerSoal.push(picked.s);
+
+            let bestOptText = "";
+            let optsHtml = "";
+            q.opts.forEach((o, idx) => {
+                const ltr = String.fromCharCode(65 + idx);
+                const isUser = picked.t === o.t;
+                const isBest = o.s === 5;
+                if (isBest) bestOptText = `${ltr}. ${o.t}`;
+                optsHtml += `<div class="review-opt ${isUser ? 'user-picked' : ''} ${isBest ? 'best-opt' : ''}">
+                    <b>${ltr}. [Skor ${o.s}]</b> ${o.t} ${isUser ? '<span style="color:#0f1c3f; font-weight:700;"> ← Pilihan Anda</span>' : ''}
+                </div>`;
+            });
+
+            exportRows.push({
+                no: i + 1,
+                dimensi: q.dimensi,
+                kriteria: q.kriteria,
+                soal: q.q,
+                pickedLetter: picked.letter,
+                pickedText: picked.t,
+                pickedScore: picked.s,
+                bestText: bestOptText,
+                inti: q.pembahasan.inti
+            });
+
+            h += `<div class="review-card">
+                <div class="badge-dim">DIMENSI: ${q.dimensi.toUpperCase()} | KRITERIA: ${q.kriteria.toUpperCase()}</div>
+                <div style="font-weight:700; color:var(--primary); font-size:1.05rem; margin-bottom:12px; line-height:1.55;">
+                    SOAL ${i + 1}. ${q.q}
+                </div>
+                ${optsHtml}
+                <div style="margin-top:10px; font-weight:700; color:${picked.s === 5 ? '#1e8449' : (picked.s >= 3 ? '#b7791f' : '#c0392b')};">
+                    Respons Anda: ${picked.letter === '-' ? 'Kosong' : picked.letter} (Skor Diperoleh: ${picked.s} / 5)
+                </div>
+                <div class="pembahasan-box">
+                    <p><b>Inti Persoalan & Aspek yang Diuji:</b> ${q.pembahasan.inti} Aspek perilaku yang diukur pada butir ini meliputi ${q.pembahasan.diuji.toLowerCase()}</p>
+                    <p><b>Mengapa Skor 5 Paling Tepat:</b> ${q.pembahasan.s5}</p>
+                    <p><b>Analisis Pilihan Skor 4:</b> ${q.pembahasan.s4}</p>
+                    <p><b>Analisis Pilihan Skor 3:</b> ${q.pembahasan.s3}</p>
+                    <p><b>Analisis Pilihan Skor 2:</b> ${q.pembahasan.s2}</p>
+                    <p><b>Analisis Pilihan Skor 1:</b> ${q.pembahasan.s1}</p>
+                    <p><b>Pelajaran Perilaku Nyata:</b> ${q.pembahasan.pelajaran}</p>
+                </div>
+            </div>`;
+        });
+
+        const nilaiAkhir = Number(((total / 150) * 100).toFixed(2));
+
+        lastPayload = {
+            action: "saveTryout",
+            sessionId: sessionId,
+            namaSiswa: pName,
+            program: "POLRI",
+            namaTryout: "TKP SERI 2",
+            jenisTes: "TKP",
+            tanggal: formatDateID(endTimeObj),
+            waktuMulai: formatTimeID(startTimeObj),
+            waktuSelesai: formatTimeID(endTimeObj),
+            durasi: formatDurationID(endTimeObj - startTimeObj),
+            jumlahSoal: TOTAL_SOAL,
+            tkp: total,
+            TKP: total,
+            skorTKP: total,
+            nilaiAkhir: nilaiAkhir,
+            prososial: dimScores["Prososial"].score,
+            kepercayaanDiri: dimScores["Kepercayaan Diri"].score,
+            pengendalianDiri: dimScores["Pengendalian Diri"].score,
+            penyesuaianDiri: dimScores["Penyesuaian Diri"].score,
+            jawabanDetail: jawabanList.join(", "),
+            skorPerSoal: skorPerSoal.join(",")
+        };
+
+        finalReportData = {
+            payload: lastPayload,
+            rows: exportRows,
+            reviewHtml: h
+        };
+
+        document.getElementById('exam-container').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'block';
+
+        document.getElementById('res-name').innerText = "PESERTA: " + pName.toUpperCase();
+        document.getElementById('score-area').innerHTML = `
+            <div class="score-box">TOTAL POIN TKP<br><b style="font-size:1.5rem; color:var(--primary);">${total} / 150</b></div>
+            <div class="score-box" style="background:var(--primary); color:var(--cream);">NILAI AKHIR<br><b style="font-size:1.5rem;">${nilaiAkhir.toFixed(1)}</b></div>`;
+
+        document.getElementById('dim-area').innerHTML = `
+            <div class="dim-box"><small style="color:#4b5563; font-weight:600;">PROSOSIAL (8 Soal)</small><div style="font-size:1.3rem; font-weight:800; color:var(--primary); margin-top:4px;">${dimScores["Prososial"].score} / 40</div></div>
+            <div class="dim-box"><small style="color:#4b5563; font-weight:600;">KEPERCAYAAN DIRI (7 Soal)</small><div style="font-size:1.3rem; font-weight:800; color:var(--primary); margin-top:4px;">${dimScores["Kepercayaan Diri"].score} / 35</div></div>
+            <div class="dim-box"><small style="color:#4b5563; font-weight:600;">PENGENDALIAN DIRI (8 Soal)</small><div style="font-size:1.3rem; font-weight:800; color:var(--primary); margin-top:4px;">${dimScores["Pengendalian Diri"].score} / 40</div></div>
+            <div class="dim-box"><small style="color:#4b5563; font-weight:600;">PENYESUAIAN DIRI (7 Soal)</small><div style="font-size:1.3rem; font-weight:800; color:var(--primary); margin-top:4px;">${dimScores["Penyesuaian Diri"].score} / 35</div></div>`;
+
+        document.getElementById('review-list').innerHTML = h;
+        window.scrollTo(0, 0);
+
+        sendResultToMaster(lastPayload);
+    }
+</script>
+</body>
+</html>
